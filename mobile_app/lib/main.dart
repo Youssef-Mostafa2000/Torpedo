@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/screens/Home.dart';
+import 'package:mobile_app/screens/OnBoarding.dart';
 import 'package:mobile_app/themes/AppTheme.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Torpedo',
       theme: AppTheme(),
-      home: const HomeScreen(),
+      home: const OnBoardingScreen(),
     );
   }
 }
