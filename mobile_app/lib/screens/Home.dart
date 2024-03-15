@@ -10,7 +10,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Torpedo'),
       ),
-      body: Container(child: Text('Hello')),
+      body: Container(
+        child: Center(
+          child: Text('Home Screen'),
+        ),
+      ),
     );
   }
 }

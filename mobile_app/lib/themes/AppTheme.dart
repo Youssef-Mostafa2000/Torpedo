@@ -31,11 +31,16 @@ ThemeData AppTheme() => ThemeData(
       primaryColor: const Color(0xff033f73),
       appBarTheme: const AppBarTheme(
         color: Color(0xff033f73),
+        foregroundColor: Colors.white,
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(const Color(0xff033f73)),
         ),
+      ),
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: Color(0xffdde5e7),
+        selectionHandleColor: Color(0xff033f73),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(

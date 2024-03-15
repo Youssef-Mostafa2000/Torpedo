@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,12 +12,13 @@ class OnBoardingContent {
   final double? height;
   final double? width;
 
-  OnBoardingContent(
-      {required this.image,
-      required this.title,
-      required this.description,
-      required this.height,
-      required this.width});
+  OnBoardingContent({
+    required this.image,
+    required this.title,
+    required this.description,
+    required this.height,
+    required this.width,
+  });
 }
 
 // OnBoarding pages
@@ -50,7 +50,6 @@ final List<OnBoardingContent> pages = [
 ];
 
 // OnBoarding Widget
-
 class OnBoardingWidget extends StatelessWidget {
   final OnBoardingContent content;
   const OnBoardingWidget({super.key, required this.content});
@@ -120,7 +119,6 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late PageController _pageController;
   int _pageIndex = 0;
-  double _progressValue = 1 / 3;
   Timer? _timer;
 
   @override
