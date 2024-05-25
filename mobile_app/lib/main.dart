@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/shipments-filter',
+      initialRoute: '/login',
       title: 'Torpedo',
       theme: AppTheme(),
       //home: const OnBoardingScreen(),

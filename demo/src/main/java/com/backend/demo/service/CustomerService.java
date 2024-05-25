@@ -8,6 +8,7 @@ public interface CustomerService {
 	
 	public List<Customer> findAll() throws Exception;
 	public Customer findById(int id) throws Exception;
+	public Customer findByPhoneNumber(int phoneNumber) throws Exception;
 	public Customer addCustomer(Customer myCustomer) throws Exception;
 	public Customer updateCustomer(int id,Customer myCustomer) throws Exception;
 	public void deleteById(int id) throws Exception;

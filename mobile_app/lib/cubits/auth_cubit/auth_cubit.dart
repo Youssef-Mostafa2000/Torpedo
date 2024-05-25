@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
+import 'dart:convert';
+import 'package:dio/dio.dart';
 part 'auth_state.dart';
+
+const String Url = 'http://10.0.2.2:8080';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -17,14 +20,27 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> userLogin() async {
+  Future<void> userLogin(user) async {
+    final dio = new Dio();
+    emit(LoginLoading());
     try {
-      emit(LoginLoading());
       // login api here
-      /******************************************/
+      final response = await dio.post(
+        '$Url/authenticate',
+        data: user,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      print(response);
       emit(LoginSuccess());
-    } catch (e) {
-      emit(LoginFailure(errorMessage: 'error'));
+      //return response;
+    } on DioException catch (e) {
+      print(e.toString());
+      emit(LoginFailure(errorMessage: e.response!.data['message']));
     }
   }
 }

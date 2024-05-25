@@ -1,13 +1,19 @@
 package com.backend.demo.authenticatemodel;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.backend.demo.entity.Customer;
+
 public class AuthenticationResponse {
 
 	private String message;
 	private String jwt;
+	private Customer myCustomer;
 
-	public AuthenticationResponse(String message, String jwt) {
+	public AuthenticationResponse(String message, String jwt,Customer myCustomer) {
 		this.jwt = jwt;
 		this.message = message;
+		this.myCustomer=myCustomer;
 	}
 
 
@@ -31,4 +37,20 @@ public class AuthenticationResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+
+
+	public Customer getMyCustomer() {
+		return myCustomer;
+	}
+
+
+
+	public void setMyCustomer(Customer myCustomer) {
+		this.myCustomer = myCustomer;
+	}
+
+
+
+
 }

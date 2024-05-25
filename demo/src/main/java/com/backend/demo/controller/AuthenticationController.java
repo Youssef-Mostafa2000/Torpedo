@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.demo.authenticatemodel.AuthenticationRequest;
 import com.backend.demo.authenticatemodel.AuthenticationResponse;
+import com.backend.demo.entity.Customer;
 import com.backend.demo.jwtconfig.JwtUtil;
 import com.backend.demo.service.BlackListedService;
+import com.backend.demo.service.CustomerService;
 import com.backend.demo.service.UserDetailsService;
 
 
@@ -37,6 +39,9 @@ public class AuthenticationController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -47,13 +52,14 @@ public class AuthenticationController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getPhoneNumber(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
 
-            return new ResponseEntity(new AuthenticationResponse("Incorrect username or password", null),HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new AuthenticationResponse("Incorrect username or password", null,null),HttpStatus.NOT_FOUND);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getPhoneNumber());
         final String jwt = jwtUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse("success",jwt));
+        Customer myCustomer=customerService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+        myCustomer.setPassword("****");
+        return ResponseEntity.ok(new AuthenticationResponse("success",jwt,myCustomer));
     }
     
     @PostMapping("/signout")

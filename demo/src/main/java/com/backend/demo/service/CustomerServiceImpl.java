@@ -70,4 +70,10 @@ public class CustomerServiceImpl implements CustomerService {
 		
 	}
 
+	@Override
+	public Customer findByPhoneNumber(int phoneNumber) throws Exception {
+		Customer customer=customerDao.findByPhoneNumber(phoneNumber).orElseThrow(()-> new Exception());
+		return customer;
+	}
+
 }
