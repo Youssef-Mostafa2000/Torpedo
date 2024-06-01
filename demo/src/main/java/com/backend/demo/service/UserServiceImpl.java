@@ -67,5 +67,10 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public Users findByPhoneNumber(int phoneNumber) throws Exception {
+		return userDao.findByPhoneNumber(phoneNumber).orElseThrow(()-> new Exception());
+	}
+
 
 }

@@ -11,6 +11,7 @@ public interface UserService {
 	public Users findById(int id) throws Exception;
 	public Users addUser(Users user) throws Exception;
 	public Users updateUser(int id,Users user) throws Exception;
+	public Users findByPhoneNumber(int phoneNumber) throws Exception;
 	public void deleteUser(int id) throws Exception;
 	public void updatePassword(int phoneNumber,String newPassword) throws Exception;
 		

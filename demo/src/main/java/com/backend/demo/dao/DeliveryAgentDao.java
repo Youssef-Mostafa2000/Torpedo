@@ -11,5 +11,4 @@ import com.backend.demo.entity.DeliveryAgent;
 @Repository
 public interface DeliveryAgentDao extends JpaRepository<DeliveryAgent, Integer> {
 	Optional<DeliveryAgent> findByPhoneNumber(int phoneNumber);
-
 }

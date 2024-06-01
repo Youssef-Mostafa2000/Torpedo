@@ -62,4 +62,10 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		
 	}
 
+	@Override
+	public DeliveryAgent findByPhoneNumber(int phoneNumber) throws Exception {
+		DeliveryAgent agent= deliveryAgentDao.findByPhoneNumber(phoneNumber).orElseThrow(()-> new Exception());
+		return agent;
+	}
+
 }

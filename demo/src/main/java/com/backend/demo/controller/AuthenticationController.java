@@ -3,6 +3,7 @@ package com.backend.demo.controller;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,15 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.demo.authenticatemodel.AuthenticationRequest;
 import com.backend.demo.authenticatemodel.AuthenticationResponse;
 import com.backend.demo.entity.Customer;
+import com.backend.demo.entity.DeliveryAgent;
+import com.backend.demo.entity.Users;
 import com.backend.demo.jwtconfig.JwtUtil;
 import com.backend.demo.service.BlackListedService;
 import com.backend.demo.service.CustomerService;
+import com.backend.demo.service.DeliveryAgentService;
 import com.backend.demo.service.UserDetailsService;
+import com.backend.demo.service.UserService;
 
 
 
 @RestController
 public class AuthenticationController {
+	
+	@Autowired
+	private DeliveryAgentService agentService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private BlackListedService blackListedService;
@@ -46,21 +57,78 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtUtil;
 
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//        try {
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getPhoneNumber(), authenticationRequest.getPassword()));
+//        } catch (BadCredentialsException e) {
+//
+//            return new ResponseEntity(new AuthenticationResponse("Incorrect username or password"),HttpStatus.NOT_FOUND);
+//        }
+//
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getPhoneNumber());
+//        System.out.println(userDetails.getAuthorities());
+//        final String jwt = jwtUtil.generateToken(userDetails);
+//        
+//        if(userDetails.getAuthorities()
+//        		.contains("ROLE_CUSTOMER")) {
+//            Customer myCustomer=customerService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+//
+//        	myCustomer.setPassword("****");
+//            return ResponseEntity.ok(new AuthenticationResponse("success",jwt,myCustomer));
+//        }else if(userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"))) {
+//            DeliveryAgent agent=agentService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+//        	agent.setPassword("****");
+//            return ResponseEntity.ok(new AuthenticationResponse("success",jwt,agent));
+//        }else if(userDetails.getAuthorities().stream().collect(Collectors.toList())
+//        		.contains("ROLE_ADMIN") 
+//        		||
+//        		userDetails.getAuthorities().stream().collect(Collectors.toList())
+//        		.contains("ROLE_MANAGER")
+//        		){
+//            Users user=userService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+//        	user.setPassword("****");
+//            return ResponseEntity.ok(new AuthenticationResponse("success",jwt,user));
+//        }else {
+//            return new ResponseEntity(new AuthenticationResponse("Incorrect username or password"),HttpStatus.NOT_FOUND);
+//
+//        }
+//}
+    
+    
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getPhoneNumber(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
-
-            return new ResponseEntity(new AuthenticationResponse("Incorrect username or password", null,null),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new AuthenticationResponse("Incorrect username or password"), HttpStatus.NOT_FOUND);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getPhoneNumber());
+        System.out.println(userDetails.getAuthorities());
         final String jwt = jwtUtil.generateToken(userDetails);
-        Customer myCustomer=customerService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
-        myCustomer.setPassword("****");
-        return ResponseEntity.ok(new AuthenticationResponse("success",jwt,myCustomer));
+
+        if (userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"))) {
+            Customer myCustomer = customerService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+            myCustomer.setPassword("****");
+            return ResponseEntity.ok(new AuthenticationResponse("success", jwt, myCustomer));
+        } else if (userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_AGENT"))) {
+            DeliveryAgent agent = agentService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+            agent.setPassword("****");
+            return ResponseEntity.ok(new AuthenticationResponse("success", jwt, agent));
+        } else if (userDetails.getAuthorities().stream().anyMatch(authority ->
+                authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_MANAGER"))) {
+            Users user = userService.findByPhoneNumber(Integer.parseInt(userDetails.getUsername()));
+            user.setPassword("****");
+            return ResponseEntity.ok(new AuthenticationResponse("success", jwt, user));
+        } else {
+            return new ResponseEntity<>(new AuthenticationResponse("Incorrect username or password"), HttpStatus.NOT_FOUND);
+        }
     }
+
+       
+        
+        
     
     @PostMapping("/signout")
     public ResponseEntity<?> signOut(@RequestHeader("Authorization") String token) {
