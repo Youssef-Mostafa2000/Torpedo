@@ -45,16 +45,17 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: (context, state) {
             if (state is LoginSuccess) {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.errorMessage)),
               );
             }
           },
+
           builder: (context, state) {
             if (state is LoginLoading) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }

@@ -16,8 +16,8 @@ public class BlacklistCleanupTask {
 
 //    @Scheduled(cron = "0 0 0 * * ?")  // Runs daily at midnight
 //    @Scheduled(cron = "0 */2 * * * *")  // Runs every 2 minutes
-//    @Scheduled(cron = "*/30 * * * * *")  // Runs every 30 seconds
-    @Scheduled(cron = "0 0 0 * * SUN")  // Runs weekly at midnight on Sunday
+ //   @Scheduled(cron = "*/30 * * * * *")  // Runs every 30 seconds
+   @Scheduled(cron = "0 0 0 * * SUN")  // Runs weekly at midnight on Sunday
     public void cleanUpExpiredTokens() {
     	blackListedTokenDao.deleteByExpirationBefore(LocalDateTime.now());
         System.out.println("Expired tokens cleaned up at: " + LocalDateTime.now());
