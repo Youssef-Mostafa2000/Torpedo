@@ -7,6 +7,8 @@ class InputTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? suffix;
   final bool? obsecureText;
+  final bool? enabled;
+  final bool? required;
 
   InputTextField({
     required this.controller,
@@ -15,6 +17,8 @@ class InputTextField extends StatelessWidget {
     this.suffixIcon,
     this.suffix,
     this.obsecureText,
+    this.enabled,
+    this.required,
   });
 
   @override
@@ -24,12 +28,14 @@ class InputTextField extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Text(
-              '*',
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
+            required == true
+                ? const Text(
+                    '*',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  )
+                : Container(),
             Text(
               label,
               style: TextStyle(
@@ -42,6 +48,8 @@ class InputTextField extends StatelessWidget {
           height: 5,
         ),
         TextFormField(
+          textDirection: TextDirection.rtl,
+          enabled: enabled,
           controller: controller,
           obscureText: obsecureText == true,
           style: TextStyle(
@@ -61,6 +69,12 @@ class InputTextField extends StatelessWidget {
             fillColor: const Color(0xffF4F4F4),
             filled: true,
             enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                style: BorderStyle.none,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 style: BorderStyle.none,

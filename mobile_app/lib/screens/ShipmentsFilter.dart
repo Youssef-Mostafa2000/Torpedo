@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile_app/widgets/CustomSelectionMenu.dart';
 import 'package:mobile_app/widgets/DatePicker.dart';
 import 'package:mobile_app/widgets/SelectionMenu.dart';
@@ -80,16 +81,6 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                   ],
                 ),
               ),
-              /* الحالة */
-              /*SelectionMenu(
-                hint: 'الحالة',
-                textDirection: TextDirection.rtl,
-                onChanged: (value) {
-                  setState(() => currentChoice = value);
-                },
-                items: statusItems,
-                currentChoice: currentChoice,
-              ),*/
               CustomSelectionMenu(
                 items: ['Items1', 'Items2'],
                 onChanged: (value) => setState(() {
@@ -97,6 +88,7 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                 }),
                 selectedItem: statusCurrentChoice,
                 hint: 'الحالة',
+                label: 'الحالة',
               ),
               const SizedBox(
                 height: 20,
@@ -108,67 +100,57 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                 }),
                 selectedItem: cityCurrentChoice,
                 hint: 'المحافظة',
+                label: 'المحافظة',
               ),
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Column(
                 textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /* من */
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0, bottom: 10),
+                    child: Text(
+                      'التاريخ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  /*SizedBox(
+                    height: 10,
+                  ),*/
                   Row(
                     textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text('من'),
                       const SizedBox(
-                        width: 10,
+                        width: 15,
                       ),
-                      /*Container(
-                        width: 140,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xffF4F4F4),
-                            style: BorderStyle.solid,
-                          ),
-                          color: const Color(0xffF4F4F4),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.calendar_month),
-                            Text(
-                              '25-5-2024',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),*/
                       DatePicker(date: '25-5-2024'),
                     ],
                   ),
-                  Row(),
-                  /*DatePickerDialog(
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(Duration(days: 30)),
-                  ),*/
-                  /*DropdownButton(
-                    items: const [
-                      DropdownMenuItem(child: Text('Item1')),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text('الى'),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      DatePicker(date: '25-5-2024'),
                     ],
-                    onChanged: (val) {},
-                  ),*/
-                  /* الى */
-                  DropdownButton(
-                    items: const [
-                      DropdownMenuItem(child: Text('Item1')),
-                    ],
-                    onChanged: (val) {},
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 30,
               ),
               ElevatedButton(
                 onPressed: () {},

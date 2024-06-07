@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 40,
                     ),
                     InputTextField(
+                      required: true,
                       controller: _phoneNumberController,
                       label: 'رقم الهاتف',
                       hint: 'قم بإدخال رقم الهاتف',
@@ -96,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 30,
                     ),
                     InputTextField(
+                      required: true,
                       controller: _passwordController,
                       label: 'كلمة المرور',
                       hint: 'قم بإدخال كلمة المرور',

@@ -71,6 +71,8 @@ flutter:
     - assets/images/logo.jpg
     - assets/images/logo2.png
     - assets/images/Torpedo Text.jpeg
+    - assets/images/magnifying glass.jpg
+    - assets/images/user avatar.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
