@@ -26,8 +26,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
+    return MultiBlocProvider(
+      //create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // initialRoute: '/login',

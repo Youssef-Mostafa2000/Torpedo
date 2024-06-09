@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:mobile_app/models/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_state.dart';
 
@@ -36,14 +37,15 @@ class AuthCubit extends Cubit<AuthState> {
           },
         ),
       );
-      print(response);
+      //print(response);
 
       // Save user login status and token to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('token', response.data['jwt']);
-
-      emit(LoginSuccess());
+      User loggedUser = User.fromJson(response.data['myCustomer']);
+      print(loggedUser);
+      emit(LoginSuccess(user: loggedUser));
       //return response;
     } on DioException catch (e) {
       print(e.toString());
@@ -71,13 +73,14 @@ class AuthCubit extends Cubit<AuthState> {
       await prefs.remove('token');
       emit(AuthInitial());
 
-      print(response);
+      //print(response);
     } on DioException catch (e) {}
   }
 
   Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    print('checking login');
     if (isLoggedIn) {
       emit(LoginSuccess());
     } else {
