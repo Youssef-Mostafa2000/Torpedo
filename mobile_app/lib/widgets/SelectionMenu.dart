@@ -40,8 +40,11 @@ class SelectionMenu extends StatelessWidget {
             hint: Text(
               hint!,
               textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontSize: 14,
+              ),
             ),
-            padding: EdgeInsets.all(4),
+            padding: EdgeInsets.all(2),
 
             // alignment: Alignment.centerRight,
 

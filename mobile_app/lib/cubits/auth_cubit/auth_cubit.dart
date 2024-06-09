@@ -67,7 +67,7 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
 
-      await prefs.remove('isLoggedIn');
+      await prefs.setBool('isLoggedIn', false);
       await prefs.remove('token');
       emit(AuthInitial());
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/screens/CreateShipment.dart';
 import 'package:mobile_app/screens/Home.dart';
 import 'package:mobile_app/screens/Login.dart';
 import 'package:mobile_app/screens/OnBoarding.dart';
@@ -10,6 +11,7 @@ import 'package:mobile_app/screens/ShipmentsFilter.dart';
 import 'package:mobile_app/screens/ShipmentsSearch.dart';
 import 'package:mobile_app/screens/Splash.dart';
 import 'package:mobile_app/screens/UserProfile.dart';
+import 'package:mobile_app/screens/Wallet.dart';
 import 'package:mobile_app/themes/AppTheme.dart';
 
 void main() {
@@ -37,7 +39,8 @@ class _MyAppState extends State<MyApp> {
           listener: (context, state) {
             if (state is AuthInitial) {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const CreateShipmentScreen()),
                   (route) => false);
             }
           },
@@ -61,6 +64,8 @@ class _MyAppState extends State<MyApp> {
           '/shipments-search': (context) => const ShipmentsSearch(),
           '/settings': (context) => const SettingsScreen(),
           '/user-profile': (context) => const UserProfileScreen(),
+          '/wallet': (context) => const WalletScreen(),
+          '/create-shipment': (context) => const CreateShipmentScreen(),
         },
       ),
     );
