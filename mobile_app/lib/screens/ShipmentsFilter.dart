@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_app/widgets/Button.dart';
+import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/CustomSelectionMenu.dart';
 import 'package:mobile_app/widgets/DatePicker.dart';
 import 'package:mobile_app/widgets/SelectionMenu.dart';
@@ -15,6 +17,8 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
   late String cityCurrentChoice;
   late String statusCurrentChoice;
   final List<String> statusItems = ['Items1', 'Items2'];
+  DateTime fromDate = DateTime.now().subtract(const Duration(days: 7));
+  DateTime toDate = DateTime.now();
   final List<String> cityItems = [
     'الإسكندرية',
     'الإسماعيلية',
@@ -66,20 +70,8 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
           ),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'جميع الطلبات',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 20,
-                      ),
-                    )
-                  ],
-                ),
+              const CustomAppBar(
+                title: 'تصنيف',
               ),
               CustomSelectionMenu(
                 items: ['Items1', 'Items2'],
@@ -130,7 +122,7 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                       const SizedBox(
                         width: 15,
                       ),
-                      DatePicker(date: '25-5-2024'),
+                      DatePicker(date: fromDate),
                     ],
                   ),
                   SizedBox(
@@ -144,7 +136,7 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                       const SizedBox(
                         width: 20,
                       ),
-                      DatePicker(date: '25-5-2024'),
+                      DatePicker(date: toDate),
                     ],
                   ),
                 ],
@@ -152,7 +144,13 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
               SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
+              Button(
+                text: 'حفظ',
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              /*ElevatedButton(
                 onPressed: () {},
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
@@ -171,7 +169,7 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

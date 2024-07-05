@@ -34,9 +34,8 @@ class SelectionMenu extends StatelessWidget {
         child: DropdownButtonHideUnderline(
           child: DropdownButton(
             isExpanded: true,
-            //dropdownColor: Colors.amber,
             elevation: 1,
-            value: currentChoice,
+            value: currentChoice == '' ? null : currentChoice,
             hint: Text(
               hint!,
               textDirection: TextDirection.rtl,

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/screens/CreatePickup.dart';
 import 'package:mobile_app/screens/CreateShipment.dart';
 import 'package:mobile_app/screens/Home.dart';
 import 'package:mobile_app/screens/Login.dart';
 import 'package:mobile_app/screens/OnBoarding.dart';
+import 'package:mobile_app/screens/Pickups.dart';
+import 'package:mobile_app/screens/PickupsFilter.dart';
+import 'package:mobile_app/screens/PickupsSearch.dart';
 import 'package:mobile_app/screens/Settings.dart';
 import 'package:mobile_app/screens/Shipments.dart';
 import 'package:mobile_app/screens/ShipmentsFilter.dart';
@@ -44,8 +48,7 @@ class _MyAppState extends State<MyApp> {
           listener: (context, state) {
             if (state is AuthInitial) {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => const CreateShipmentScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                   (route) => false);
             }
           },

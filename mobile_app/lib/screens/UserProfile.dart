@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/widgets/Button.dart';
+import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/InputTextField.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -37,10 +38,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
+              const CustomAppBar(
+                title: 'البيانات الشخصية',
               ),
-              Row(
+              /*const SizedBox(
+                height: 20,
+              ),*/
+              /*Row(
                 textDirection: TextDirection.rtl,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -59,7 +63,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               const SizedBox(
                 height: 30,
               ),
