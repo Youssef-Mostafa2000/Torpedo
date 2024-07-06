@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InputTextField extends StatelessWidget {
   final controller;
@@ -6,11 +7,15 @@ class InputTextField extends StatelessWidget {
   final String hint;
   final Widget? suffixIcon;
   final Widget? suffix;
-  //final Widget? prefix;
   final String? prefixText;
   final bool? obsecureText;
   final bool? enabled;
   final bool? required;
+  final String? Function(String?)? validator;
+  final Function(String?)? onChanged;
+  final bool? error;
+  final String? errorMessage;
+  final int? maxLength;
 
   InputTextField({
     required this.controller,
@@ -18,11 +23,15 @@ class InputTextField extends StatelessWidget {
     required this.hint,
     this.suffixIcon,
     this.suffix,
-    //this.prefix,
     this.prefixText,
     this.obsecureText,
     this.enabled,
     this.required,
+    this.validator,
+    this.onChanged,
+    this.error,
+    this.errorMessage,
+    this.maxLength,
   });
 
   @override
@@ -52,10 +61,13 @@ class InputTextField extends StatelessWidget {
           height: 5,
         ),
         TextFormField(
+          validator: validator,
+          onChanged: onChanged,
           textDirection: TextDirection.rtl,
           enabled: enabled,
           controller: controller,
           obscureText: obsecureText == true,
+          maxLength: maxLength,
           style: TextStyle(
             fontSize: 14,
             color: Theme.of(context).primaryColor,
@@ -64,8 +76,8 @@ class InputTextField extends StatelessWidget {
           decoration: InputDecoration(
             suffix: suffix != null ? suffix : null,
             suffixIcon: suffixIcon != null ? suffixIcon : null,
-            //prefix: prefix != null ? prefix : null,
             prefixText: prefixText != null ? prefixText : '',
+            counterText: '',
             hintText: hint,
             hintTextDirection: TextDirection.rtl,
             contentPadding: const EdgeInsets.symmetric(
@@ -76,9 +88,12 @@ class InputTextField extends StatelessWidget {
             filled: true,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                style: BorderStyle.none,
-              ),
+              borderSide: (error == true)
+                  ? const BorderSide(
+                      color: Colors.red,
+                      width: 1,
+                    )
+                  : const BorderSide(style: BorderStyle.none),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -89,7 +104,9 @@ class InputTextField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
+                color: (error == true)
+                    ? Colors.red
+                    : Theme.of(context).primaryColor,
                 width: 2,
               ),
             ),
@@ -99,8 +116,34 @@ class InputTextField extends StatelessWidget {
                 color: Colors.red,
               ),
             ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 2,
+              ),
+            ),
+            errorStyle: const TextStyle(
+              color: Colors.red,
+              fontSize: 12,
+            ),
           ),
         ),
+        (error == true)
+            ? Row(
+                textDirection: TextDirection.rtl,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    errorMessage!,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
       ],
     );
   }

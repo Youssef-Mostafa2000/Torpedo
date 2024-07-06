@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 
-class DatePicker extends StatelessWidget {
-  final String? date;
+class DatePicker extends StatefulWidget {
+  DateTime? date;
   DatePicker({required this.date});
 
+  @override
+  State<DatePicker> createState() => _DatePickerState();
+}
+
+class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        DateTime? date = await showDatePicker(
+        DateTime? picked = await showDatePicker(
           context: context,
           firstDate: DateTime(2000),
           lastDate: DateTime(2030),
-          initialDate: DateTime.now(),
+          initialDate: widget.date,
+          currentDate: widget.date,
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
@@ -20,11 +26,25 @@ class DatePicker extends StatelessWidget {
                   primary: Theme.of(context).primaryColor,
                   onSurface: Theme.of(context).primaryColor,
                 ),
+                textButtonTheme: TextButtonThemeData(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                        Theme.of(context).primaryColor),
+                    foregroundColor:
+                        const MaterialStatePropertyAll(Colors.white),
+                  ),
+                ),
               ),
               child: child!,
             );
           },
         );
+        if (picked != null && picked != widget.date) {
+          setState(() {
+            widget.date = picked;
+          });
+        }
+        //print(widget.date);
       },
       child: Container(
         width: 160,
@@ -44,12 +64,12 @@ class DatePicker extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                date!,
-                style: TextStyle(
+                '${widget.date!.year.toString()}-${widget.date!.month.toString()}-${widget.date!.day.toString()}',
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.calendar_month,
                 // size: 20,
               ),

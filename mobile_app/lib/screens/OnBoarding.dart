@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_app/screens/Login.dart';
 
 // OnBoarding page
 
@@ -160,7 +161,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void dispose() {
     // dispose everything
     _pageController.dispose();
-    _timer!.cancel();
+    // _timer!.cancel();
     super.dispose();
   }
 
@@ -222,7 +223,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   if (_pageIndex < 3) {
                     if (_pageIndex == 2) {
                       // go to home page
-                      print('Home');
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ));
                     } else {
                       _pageIndex++;
                       _pageController.animateToPage(_pageIndex,

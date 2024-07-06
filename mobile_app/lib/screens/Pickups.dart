@@ -1,30 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:mobile_app/screens/ShipmentsFilter.dart';
+import 'package:mobile_app/screens/PickupsFilter.dart';
 import 'package:mobile_app/widgets/CustomAppBar.dart';
+import 'package:mobile_app/widgets/PickupCard.dart';
+import 'package:mobile_app/widgets/PickupsScreenStatusList.dart';
 import 'package:mobile_app/widgets/SearchField.dart';
-import 'package:mobile_app/widgets/ShipmentCard.dart';
-import 'package:mobile_app/widgets/ShipmentsScreenStatusCard.dart';
-import 'package:mobile_app/widgets/ShipmentsScreenStatusList.dart';
-import 'package:mobile_app/widgets/ShipmentsStatusCard.dart';
 
-class ShipmentsScreen extends StatefulWidget {
-  const ShipmentsScreen({super.key});
+class PickupsScreen extends StatefulWidget {
+  const PickupsScreen({super.key});
 
   @override
-  State<ShipmentsScreen> createState() => _ShipmentsScreenState();
+  State<PickupsScreen> createState() => _PickupsScreenState();
 }
 
-class _ShipmentsScreenState extends State<ShipmentsScreen> {
+class _PickupsScreenState extends State<PickupsScreen> {
   final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-        height: double.infinity,
         width: double.infinity,
+        height: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
@@ -33,7 +29,7 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
           child: Column(
             children: [
               const CustomAppBar(
-                title: 'الشحنات',
+                title: 'طلبات الإلتقاط',
               ),
               SearchField(
                 controller: _searchController,
@@ -41,9 +37,9 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const ShipmentsScreenStatusList(),
+              const PickupsScreenStatusList(),
               Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 15),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 15),
                 child: Row(
                   textDirection: TextDirection.rtl,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,8 +56,7 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const ShipmentsFilterScreen(),
+                              builder: (context) => const PickupsFilterScreen(),
                             ));
                       },
                       child: Container(
@@ -103,42 +98,42 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
                   shrinkWrap: true,
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
-                    ShipmentCard(
-                      id: '123456',
-                      name: 'يوسف مصطفى زكريا يوسف',
-                      city: 'القاهرة',
-                      district: 'عين شمس',
-                      phoneNumber: '01112367131',
-                      status: 'جديد',
-                      date: DateTime(2024, 5, 1),
+                    PickupCard(
+                      id: '#123456',
+                      status: 'تم الإلتقاط',
+                      numberOfShipments: 10,
+                      vehicleType: 'موتوسيكل',
+                      deliveryAgentName: 'يوسف مصطفى',
+                      deliveryAgentPhoneNumber: '01112367131',
+                      date: DateTime(2024, 6, 20),
                     ),
-                    ShipmentCard(
-                      id: '123456',
-                      name: 'يوسف مصطفى زكريا يوسف',
-                      city: 'القاهرة',
-                      district: 'عين شمس',
-                      phoneNumber: '01112367131',
-                      status: 'جديد',
-                      date: DateTime(2024, 5, 1),
+                    PickupCard(
+                      id: '#123456',
+                      status: 'تم الإلتقاط',
+                      numberOfShipments: 10,
+                      vehicleType: 'موتوسيكل',
+                      deliveryAgentName: 'يوسف مصطفى',
+                      deliveryAgentPhoneNumber: '01112367131',
+                      date: DateTime(2024, 6, 20),
                     ),
-                    ShipmentCard(
-                      id: '123456',
-                      name: 'يوسف مصطفى زكريا يوسف',
-                      city: 'القاهرة',
-                      district: 'عين شمس',
-                      phoneNumber: '01112367131',
-                      status: 'جديد',
-                      date: DateTime(2024, 5, 1),
+                    PickupCard(
+                      id: '#123456',
+                      status: 'تم الإلتقاط',
+                      numberOfShipments: 10,
+                      vehicleType: 'موتوسيكل',
+                      deliveryAgentName: 'يوسف مصطفى',
+                      deliveryAgentPhoneNumber: '01112367131',
+                      date: DateTime(2024, 6, 20),
                     ),
-                    ShipmentCard(
-                      id: '123456',
-                      name: 'يوسف مصطفى زكريا يوسف',
-                      city: 'القاهرة',
-                      district: 'عين شمس',
-                      phoneNumber: '01112367131',
-                      status: 'جديد',
-                      date: DateTime(2024, 5, 1),
-                    )
+                    PickupCard(
+                      id: '#123456',
+                      status: 'تم الإلتقاط',
+                      numberOfShipments: 10,
+                      vehicleType: 'موتوسيكل',
+                      deliveryAgentName: 'يوسف مصطفى',
+                      deliveryAgentPhoneNumber: '01112367131',
+                      date: DateTime(2024, 6, 20),
+                    ),
                   ],
                 ),
               ),
@@ -149,5 +144,3 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
     );
   }
 }
-
-List<ShipmentsStatusCard> statusList = [];

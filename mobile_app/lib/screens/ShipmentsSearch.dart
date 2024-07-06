@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/SearchField.dart';
 
 class ShipmentsSearch extends StatefulWidget {
@@ -26,13 +27,16 @@ class _ShipmentsSearchState extends State<ShipmentsSearch> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const CustomAppBar(
+                title: 'البحث',
+              ),
               SearchField(
                 controller: _searchController,
               ),
               const SizedBox(
                 height: 100,
               ),
-              Column(
+              const Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Image(

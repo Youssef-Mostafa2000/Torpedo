@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/screens/CreatePickup.dart';
+import 'package:mobile_app/screens/CreateShipment.dart';
 import 'package:mobile_app/screens/Login.dart';
+import 'package:mobile_app/screens/Pickups.dart';
+import 'package:mobile_app/screens/PickupsSearch.dart';
+import 'package:mobile_app/screens/Settings.dart';
+import 'package:mobile_app/screens/Shipments.dart';
+import 'package:mobile_app/screens/ShipmentsSearch.dart';
+import 'package:mobile_app/screens/Wallet.dart';
 import 'package:mobile_app/widgets/Menu.dart';
 import 'package:mobile_app/widgets/MenuItem.dart';
 import 'package:mobile_app/widgets/ShipmentStatusList.dart';
@@ -21,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    username = '';
+    username = 'يوسف';
   }
 
   @override
@@ -71,14 +79,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Column(
                     children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      Row(
+                        textDirection: TextDirection.rtl,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image(
+                          const Image(
                             image:
                                 AssetImage('assets/images/Torpedo Text.jpeg'),
                             width: 120,
                             height: 120,
+                          ),
+                          IconButton(
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SettingsScreen(),
+                                  ));
+                            },
+                            icon: Icon(
+                              Icons.settings,
+                              size: 30,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         ],
                       ),
@@ -182,7 +207,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 14,
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ShipmentsScreen(),
+                                    ));
+                              },
                             ),
                           ],
                         ),
@@ -208,7 +240,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           MenuItem(
                             name: 'طلب جديد',
                             icon: Icons.add,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CreateShipmentScreen(),
+                                  ));
+                            },
                           ),
                           MenuItem(
                             name: 'تتبع الشحنة',
@@ -218,7 +257,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           MenuItem(
                             name: 'البحث والإستعلام',
                             icon: Icons.search_outlined,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ShipmentsSearch(),
+                                  ));
+                            },
                           ),
                         ],
                       ),
@@ -242,12 +288,37 @@ class _HomeScreenState extends State<HomeScreen> {
                           MenuItem(
                             name: 'طلب جديد',
                             icon: Icons.add,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CreatePickupScreen(),
+                                  ));
+                            },
+                          ),
+                          MenuItem(
+                            name: 'عرض الكل',
+                            icon: Icons.view_list_outlined,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const PickupsScreen(),
+                                  ));
+                            },
                           ),
                           MenuItem(
                             name: 'البحث والإستعلام',
                             icon: Icons.search_outlined,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PickupsSearchScreen(),
+                                  ));
+                            },
                           ),
                         ],
                       ),
@@ -271,14 +342,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           MenuItem(
                             name: 'كشف حساب',
                             icon: Icons.wallet_outlined,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const WalletScreen(),
+                                  ));
+                            },
                           ),
                         ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
+                      /*ElevatedButton(
                         onPressed: () async {
                           BlocProvider.of<AuthCubit>(context).userLogout();
                         },
@@ -299,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),

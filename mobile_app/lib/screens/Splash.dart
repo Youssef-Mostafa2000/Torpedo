@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // timer for navigation to main screen
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/onBoarding');
     });
 
     return Scaffold(

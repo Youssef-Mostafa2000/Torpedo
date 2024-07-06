@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/DeliveredShipmentsCard.dart';
 import 'package:mobile_app/widgets/DeliveredShipmentsList.dart';
 import 'package:mobile_app/widgets/WalletItem.dart';
@@ -16,12 +17,12 @@ class WalletScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
-            vertical: 30.0,
+            vertical: 50.0,
           ),
           child: Column(
             children: [
-              const SizedBox(
-                height: 30,
+              const CustomAppBar(
+                title: 'كشف الحساب',
               ),
               Container(
                 decoration: const BoxDecoration(

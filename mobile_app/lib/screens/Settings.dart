@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/screens/UserProfile.dart';
+import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/Menu.dart';
 import 'package:mobile_app/widgets/MenuItem.dart';
 
@@ -18,8 +20,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const SizedBox(
-                height: 30,
+              const CustomAppBar(
+                title: 'الإعدادات',
               ),
               Row(
                 textDirection: TextDirection.rtl,
@@ -56,7 +58,13 @@ class SettingsScreen extends StatelessWidget {
                   MenuItem(
                     name: 'البيانات الشخصية',
                     icon: Icons.account_circle_outlined,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserProfileScreen(),
+                          ));
+                    },
                   ),
                 ],
               ),
