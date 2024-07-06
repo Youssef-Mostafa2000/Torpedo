@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/models/User.dart';
 import 'package:mobile_app/screens/CreatePickup.dart';
 import 'package:mobile_app/screens/CreateShipment.dart';
 import 'package:mobile_app/screens/Login.dart';
@@ -13,7 +14,6 @@ import 'package:mobile_app/screens/Wallet.dart';
 import 'package:mobile_app/widgets/Menu.dart';
 import 'package:mobile_app/widgets/MenuItem.dart';
 import 'package:mobile_app/widgets/ShipmentStatusList.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,51 +23,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? username;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    username = 'يوسف';
+    // Ensure that we are checking the login status in the cubit.
+    BlocProvider.of<AuthCubit>(context).checkLoginStatus();
   }
 
   @override
   Widget build(BuildContext context) {
     String balance = "1000";
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => AuthCubit(),
-        child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state is AuthInitial) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            }
-          },
-          builder: (context, state) {
-            // if (state is LoginSuccess) {
-            //   print('Logged in !!!!!!!!!!!!!!');
-            //   setState(() {
-            //     username = state.user!.name;
-            //   });
-            // }
-            /*if (state is AuthInitial) {
-              /*context
-                  .read<AuthCubit>()
-                  .userLogin({"phoneNumber": 1113194986, "password": '123456'});*/
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } */
-            if (state is LoginLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is LoginLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is LoginSuccess) {
+            final User user = state.user!;
             return SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -111,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'أهلا ${username}',
+                            'أهلا ${user.name}',
                             style: TextStyle(
                               fontSize: 30,
                               color: Theme.of(context).primaryColor,
@@ -355,35 +337,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      /*ElevatedButton(
-                        onPressed: () async {
-                          BlocProvider.of<AuthCubit>(context).userLogout();
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 16.0,
-                            horizontal: 30,
-                          ),
-                          child: Text(
-                            'تسجيل الخروج',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ),*/
                     ],
                   ),
                 ),
               ),
             );
-          },
-        ),
+          } else {
+            /*Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+            return const Center(
+              child: Text('Login required'),
+            );
+          }
+        },
       ),
     );
   }

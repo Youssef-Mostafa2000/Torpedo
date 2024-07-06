@@ -19,4 +19,13 @@ class Address {
       district: json['district'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'detailedAddress': detailedAddress,
+      'city': city,
+      'district': district
+    };
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mobile_app/models/Address.dart';
 
 class User {
@@ -16,18 +18,25 @@ class User {
   });
 
   factory User.fromJson(json) {
-    List<Address> addresses = [];
-    for (var address in json['addresses']) {
-      Address addr = Address.fromJson(address);
-      addresses.add(addr);
-    }
+    var list = json['addresses'] as List;
+    List<Address> addressesList = list.map((i) => Address.fromJson(i)).toList();
 
     return User(
       id: json['id'],
       name: json['name'],
       phoneNumber: json['phoneNumber'],
       role: json['role'],
-      addresses: addresses,
+      addresses: addressesList,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'phoneNumber': phoneNumber,
+      'role': role,
+      'addresses': addresses!.map((address) => address.toJson()).toList()
+    };
   }
 }

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 part 'auth_state.dart';
 
 const String Url = 'http://10.0.2.2:8080';
@@ -14,19 +15,21 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> userRegister() async {
     try {
       emit(RegisterLoading());
-      // register api here
+      // register API here
       /******************************************/
+      if (isClosed) return;
       emit(RegisterSuccess());
     } catch (e) {
+      if (isClosed) return;
       emit(RegisterFailure(errorMessage: 'error'));
     }
   }
 
   Future<void> userLogin(user) async {
-    final dio = new Dio();
+    final dio = Dio();
     emit(LoginLoading());
     try {
-      // login api here
+      // login API here
       final response = await dio.post(
         '$Url/authenticate',
         data: user,
@@ -37,28 +40,27 @@ class AuthCubit extends Cubit<AuthState> {
           },
         ),
       );
-      //print(response);
 
-      // Save user login status and token to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('token', response.data['jwt']);
+
       User loggedUser = User.fromJson(response.data['myCustomer']);
-      // save user in shared preference
-      print(loggedUser);
+      await prefs.setBool('isLoggedIn', true);
+      await _saveUser(loggedUser, response.data['jwt']);
+
+      if (isClosed) return;
       emit(LoginSuccess(user: loggedUser));
-      //return response;
     } on DioException catch (e) {
-      print(e.toString());
-      emit(LoginFailure(errorMessage: e.response!.data['message']));
+      if (isClosed) return;
+      emit(LoginFailure(
+          errorMessage: e.response?.data['message'] ?? 'An error occurred'));
     }
   }
 
   Future<void> userLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final dio = new Dio();
-    dio.options.headers["Authorization"] = 'Bearer ${token}';
+    final dio = Dio();
+    dio.options.headers["Authorization"] = 'Bearer $token';
     try {
       final response = await dio.post(
         '$Url/signout',
@@ -71,11 +73,13 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       await prefs.setBool('isLoggedIn', false);
-      await prefs.remove('token');
-      emit(AuthInitial());
+      await _removeUser();
 
-      //print(response);
-    } on DioException catch (e) {}
+      if (isClosed) return;
+      emit(AuthInitial());
+    } on DioException catch (e) {
+      // Handle logout error if necessary
+    }
   }
 
   Future<void> checkLoginStatus() async {
@@ -83,9 +87,37 @@ class AuthCubit extends Cubit<AuthState> {
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     print('checking login');
     if (isLoggedIn) {
-      emit(LoginSuccess());
+      User? user = await loadUser();
+      if (user != null) {
+        emit(LoginSuccess(user: user));
+      } else {
+        emit(AuthInitial());
+      }
     } else {
       emit(AuthInitial());
     }
+  }
+
+  Future<void> _saveUser(User user, String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = jsonEncode(user.toJson());
+    await prefs.setString('user', userJson);
+    await prefs.setString('token', token);
+  }
+
+  Future<void> _removeUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user');
+    await prefs.remove('token');
+  }
+
+  Future<User?> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('user');
+    if (userJson != null) {
+      final userMap = jsonDecode(userJson);
+      return User.fromJson(userMap);
+    }
+    return null;
   }
 }

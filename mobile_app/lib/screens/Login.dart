@@ -227,10 +227,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          /*BlocProvider.of<AuthCubit>(context).userLogin({
-                            "phoneNumber": int.parse(_phoneNumberController.text),
+                          BlocProvider.of<AuthCubit>(context).userLogin({
+                            "phoneNumber":
+                                int.parse(_phoneNumberController.text),
                             "password": _passwordController.text
-                          });*/
+                          });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ));
                           if (isPhoneNumberValid(_phoneNumberController.text) &&
                               isPasswordValid(_passwordController.text)) {
                             Navigator.pushReplacement(
