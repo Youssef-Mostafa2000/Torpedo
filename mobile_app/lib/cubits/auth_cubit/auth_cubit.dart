@@ -44,6 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('token', response.data['jwt']);
       User loggedUser = User.fromJson(response.data['myCustomer']);
+      // save user in shared preference
       print(loggedUser);
       emit(LoginSuccess(user: loggedUser));
       //return response;

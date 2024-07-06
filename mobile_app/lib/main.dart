@@ -44,8 +44,7 @@ class _MyAppState extends State<MyApp> {
           listener: (context, state) {
             if (state is AuthInitial) {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => const CreateShipmentScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (route) => false);
             }
           },
