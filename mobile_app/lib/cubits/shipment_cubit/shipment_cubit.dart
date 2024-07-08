@@ -14,7 +14,6 @@ class ShipmentCubit extends Cubit<ShipmentState> {
   Future<void> createShipment(shipment) async {
     emit(ShipmentLoading());
     try {
-      // create shipment api
       ShipmentService(Dio()).createShipment(shipment);
       loadShipments();
     } on DioException catch (e) {
@@ -34,20 +33,9 @@ class ShipmentCubit extends Cubit<ShipmentState> {
   }
 
   Future<void> getShipment(id) async {
-    final dio = Dio();
     emit(ShipmentLoading());
     try {
-      final response = await dio.get(
-        '$Url/shipments/${id}',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-        ),
-      );
-      print(response.data);
-      Shipment shipment = Shipment.fromJson(response.data);
+      Shipment shipment = ShipmentService(Dio()).getShipmentById(id);
       emit(ShipmentLoaded(shipment));
     } on DioException catch (e) {
       emit(ShipmentFailure(e.response!.data['message']));
