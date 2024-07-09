@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:mobile_app/models/Address.dart';
-import 'package:mobile_app/models/Shipment.dart';
+import 'package:admin_app/models/Address.dart';
 
 class User {
   final int? id;
@@ -9,7 +8,6 @@ class User {
   final int? phoneNumber;
   final String? role;
   final List<Address>? addresses;
-  final List<Shipment>? shipments;
 
   User({
     required this.id,
@@ -17,17 +15,11 @@ class User {
     required this.phoneNumber,
     required this.role,
     required this.addresses,
-    required this.shipments,
   });
 
   factory User.fromJson(json) {
-    var addrList = json['addresses'] as List;
-    List<Address> addressesList =
-        addrList.map((i) => Address.fromJson(i)).toList();
-
-    var shipList = json['shipments'] as List;
-    List<Shipment> shipmentsList =
-        shipList.map((i) => Shipment.fromJson(i)).toList();
+    var list = json['addresses'] as List;
+    List<Address> addressesList = list.map((i) => Address.fromJson(i)).toList();
 
     return User(
       id: json['id'],
@@ -35,7 +27,6 @@ class User {
       phoneNumber: json['phoneNumber'],
       role: json['role'],
       addresses: addressesList,
-      shipments: shipmentsList,
     );
   }
 
