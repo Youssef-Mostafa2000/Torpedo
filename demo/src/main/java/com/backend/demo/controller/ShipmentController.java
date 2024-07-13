@@ -19,7 +19,9 @@ import com.backend.demo.dao.ShipmentDao;
 import com.backend.demo.entity.Receiver;
 import com.backend.demo.entity.Shipment;
 import com.backend.demo.model.ReceiverResponse;
+import com.backend.demo.model.ShipmentDto;
 import com.backend.demo.model.ShipmentResponse;
+import com.backend.demo.model.ShipmentResponseDto;
 import com.backend.demo.service.ShipmentService;
 
 @RestController
@@ -40,6 +42,75 @@ public class ShipmentController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ShipmentResponse("something went wrong", shipments), HttpStatus.NOT_FOUND);
+
+		}
+	}
+	
+	@GetMapping(value = "/shipment/customer/{id}")
+	public ResponseEntity<?> findAllByCustomerId(@PathVariable int id) {
+		List<Shipment> shipments = null;
+		List<ShipmentDto> shipmentDtos=new ArrayList<ShipmentDto>();
+		ShipmentDto shipmentDto =null;
+		try {
+			shipments = shipmentService.findAll();
+			for(int i=0;i<shipments.size();i++) {
+				if(shipments.get(i).getCustomer().getId()==id) {
+					 shipmentDto =new ShipmentDto();
+
+					shipmentDto.setId(shipments.get(i).getId());
+					shipmentDto.setCustomerId(shipments.get(i).getCustomer().getId());
+					shipmentDto.setDeliveryAgentId(shipments.get(i).getDeliveryAgent().getId());
+					shipmentDto.setItem(shipments.get(i).getItem());
+					shipmentDto.setOrderPrice(shipments.get(i).getOrderPrice());
+					shipmentDto.setReceiver(shipments.get(i).getReceiver());
+					shipmentDto.setService(shipments.get(i).getService());
+					shipmentDto.setShipmentConstrains(shipments.get(i).getShipmentConstrains());
+					shipmentDto.setStatus(shipments.get(i).getStatus());
+					shipmentDtos.add(shipmentDto);
+
+				}
+			}
+			if (shipments.size() != 0) {
+				return new ResponseEntity<>(new ShipmentResponseDto("Shipments Retrived Successfully", shipmentDtos), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ShipmentResponseDto("There is no Shipments in DB", shipmentDtos), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ShipmentResponseDto("something went wrong", shipmentDtos), HttpStatus.NOT_FOUND);
+
+		}
+	}
+	
+	@GetMapping(value = "/shipment/agent/{id}")
+	public ResponseEntity<?> findAllByAgentId(@PathVariable int id) {
+		List<Shipment> shipments = null;
+		List<ShipmentDto> shipmentDtos=new ArrayList<ShipmentDto>();
+		ShipmentDto shipmentDto =null;
+		try {
+			shipments = shipmentService.findAll();
+			for(int i=0;i<shipments.size();i++) {
+				if(shipments.get(i).getDeliveryAgent().getId()==id) {
+					shipmentDto =new ShipmentDto();
+					shipmentDto.setId(shipments.get(i).getId());
+					shipmentDto.setCustomerId(shipments.get(i).getCustomer().getId());
+					shipmentDto.setDeliveryAgentId(shipments.get(i).getDeliveryAgent().getId());
+					shipmentDto.setItem(shipments.get(i).getItem());
+					shipmentDto.setOrderPrice(shipments.get(i).getOrderPrice());
+					shipmentDto.setReceiver(shipments.get(i).getReceiver());
+					shipmentDto.setService(shipments.get(i).getService());
+					shipmentDto.setShipmentConstrains(shipments.get(i).getShipmentConstrains());
+					shipmentDto.setStatus(shipments.get(i).getStatus());
+					shipmentDtos.add(shipmentDto);
+
+				}
+			}
+			if (shipments.size() != 0) {
+				return new ResponseEntity<>(new ShipmentResponseDto("Shipments Retrived Successfully", shipmentDtos), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ShipmentResponseDto("There is no Shipments in DB", shipmentDtos), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ShipmentResponseDto("something went wrong", shipmentDtos), HttpStatus.NOT_FOUND);
 
 		}
 	}

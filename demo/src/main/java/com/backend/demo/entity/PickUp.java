@@ -1,5 +1,6 @@
 package com.backend.demo.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.backend.demo.serialization.CustomerSerializer;
@@ -22,47 +22,47 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
-@Table(name = "shipment")
+@Table(name="pickup")
 @JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 
-public class Shipment {
-
+public class PickUp {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-
-	@Column(name = "order_price")
-	private double orderPrice;
-
-	@Column(name = "status")
+	
+	@Column(name = "shipmentsCount")
+	private int shipmentsCount;
+	
+	@Column(name="pickedShipments")
+	private int pickedShipments;
+	
+	@Column(name="vehicleType")
+	private String vehicleType;
+	
+	@Column(name="status")
 	private String status;
+	
+	@Column(name="notes")
+	private String notes;
+	
 
-	@OneToOne
-	@JoinColumn(name = "receiver_id", referencedColumnName = "id")
-	private Receiver receiver;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name="customer_id")
     @JsonSerialize(using = CustomerSerializer.class)
 	private Customer customer;
-
-
-	@OneToOne
-	@JoinColumn(name = "item_id", referencedColumnName = "id")
-	private Item item;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "deliveryagent_id")
+	@JoinColumn(name="deliveryagent_id")
 	private DeliveryAgent deliveryAgent;
-
-	@Column(name = "service")
-	private String service;
-
-	@Column(name = "shipment_constrains")
-	private String shipmentConstrains;
-
-	public Shipment() {
+	
+	
+	@Column
+	private LocalDate date;
+	
+	public PickUp() {
 	}
 
 	public int getId() {
@@ -73,12 +73,28 @@ public class Shipment {
 		this.id = id;
 	}
 
-	public double getOrderPrice() {
-		return orderPrice;
+	public int getShipmentsCount() {
+		return shipmentsCount;
 	}
 
-	public void setOrderPrice(double orderPrice) {
-		this.orderPrice = orderPrice;
+	public void setShipmentsCount(int shipmentsCount) {
+		this.shipmentsCount = shipmentsCount;
+	}
+
+	public int getPickedShipments() {
+		return pickedShipments;
+	}
+
+	public void setPickedShipments(int pickedShipments) {
+		this.pickedShipments = pickedShipments;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
 	}
 
 	public String getStatus() {
@@ -89,12 +105,12 @@ public class Shipment {
 		this.status = status;
 	}
 
-	public Receiver getReceiver() {
-		return receiver;
+	public String getNotes() {
+		return notes;
 	}
 
-	public void setReceiver(Receiver receiver) {
-		this.receiver = receiver;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	public Customer getCustomer() {
@@ -105,12 +121,12 @@ public class Shipment {
 		this.customer = customer;
 	}
 
-	public Item getItem() {
-		return item;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public void setItems(Item item) {
-		this.item = item;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	public DeliveryAgent getDeliveryAgent() {
@@ -120,21 +136,7 @@ public class Shipment {
 	public void setDeliveryAgent(DeliveryAgent deliveryAgent) {
 		this.deliveryAgent = deliveryAgent;
 	}
-
-	public String getService() {
-		return service;
-	}
-
-	public void setService(String service) {
-		this.service = service;
-	}
-
-	public String getShipmentConstrains() {
-		return shipmentConstrains;
-	}
-
-	public void setShipmentConstrains(String shipmentConstrains) {
-		this.shipmentConstrains = shipmentConstrains;
-	}
-
+	
+	
+	
 }

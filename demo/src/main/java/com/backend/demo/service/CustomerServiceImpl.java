@@ -48,6 +48,8 @@ public class CustomerServiceImpl implements CustomerService {
 		if(findById(id)==null) {
 			throw new Exception();
 		}
+		myCustomer.setRole("ROLE_CUSTOMER");
+
 		Customer customer=customerDao.save(myCustomer);
 		return customer;
 	}

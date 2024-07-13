@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -26,11 +28,16 @@ public class DeliveryAgent {
 	@Column(name="phone_number")
 	private int phoneNumber;
 	@Column(name = "password")
+	@JsonIgnore
 	private String password;
 	
 	@OneToMany(mappedBy = "deliveryAgent" , cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH} )
-	@JsonManagedReference
+	@JsonIgnore
 	private List<Shipment> shipments;
+	
+	@OneToMany(mappedBy = "deliveryAgent" , cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH} )
+	@JsonIgnore
+	private List<PickUp> pickups;
 	
 	@Column
 	private String role;
@@ -83,6 +90,14 @@ public class DeliveryAgent {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public List<PickUp> getPickups() {
+		return pickups;
+	}
+
+	public void setPickups(List<PickUp> pickups) {
+		this.pickups = pickups;
 	}
 	
 	

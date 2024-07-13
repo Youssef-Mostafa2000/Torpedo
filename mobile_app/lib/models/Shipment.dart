@@ -11,6 +11,7 @@ class Shipment {
   final User? user;
   final String? service;
   final String? shipmentConstrains;
+  final DateTime? date;
 
   Shipment({
     required this.id,
@@ -18,21 +19,25 @@ class Shipment {
     required this.price,
     required this.receiver,
     required this.status,
-    required this.user,
+    this.user,
     required this.service,
     this.shipmentConstrains,
+    this.date,
   });
 
   factory Shipment.fromJson(json) {
     return Shipment(
       id: json['id'],
-      item: json['item'],
-      price: json['price'],
-      status: json['status'],
+      item: json['item'] ?? null,
+      price: json['price'] ?? 0,
+      status: json['status'] ?? 'جديد',
       receiver: json['receiver'],
-      user: json['user'],
-      service: json['service'],
-      shipmentConstrains: json['shipmentConstrains'],
+      user: json['user'] ?? null,
+      service: json['service'] ?? '',
+      shipmentConstrains: json['shipmentConstrains'] ?? '',
+      date: json['date'] != null
+          ? DateTime.tryParse(json['date'])
+          : DateTime.now(),
     );
   }
 }

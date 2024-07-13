@@ -31,6 +31,9 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	@Override
 	public DeliveryAgent addDeliveryAgent(DeliveryAgent deliveryAgent) throws Exception {
 		deliveryAgent.setId(0);
+		deliveryAgent.setRole("ROLE_AGENT");
+		deliveryAgent.setPassword(bCryptPasswordEncoder.encode(deliveryAgent.getPassword()));
+
 		DeliveryAgent agent=deliveryAgentDao.save(deliveryAgent);
 		return agent;
 	}
@@ -40,6 +43,9 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		if(findById(id)==null) {
 			throw new Exception();
 		}
+		deliveryAgent.setRole("ROLE_AGENT");
+		deliveryAgent.setPassword(bCryptPasswordEncoder.encode(deliveryAgent.getPassword()));
+
 		DeliveryAgent agent=deliveryAgentDao.save(deliveryAgent);
 		return agent;
 	}

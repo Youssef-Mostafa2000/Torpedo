@@ -41,6 +41,8 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
 
+      print(response.data['myCustomer']);
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       User loggedUser = User.fromJson(response.data['myCustomer']);

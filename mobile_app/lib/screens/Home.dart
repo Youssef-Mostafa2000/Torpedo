@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/cubits/pickup_cubit/pickup_cubit.dart';
+import 'package:mobile_app/cubits/shipment_cubit/shipment_cubit.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:mobile_app/screens/CreatePickup.dart';
 import 'package:mobile_app/screens/CreateShipment.dart';
@@ -190,6 +192,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               onTap: () {
+                                BlocProvider.of<ShipmentCubit>(context)
+                                    .getShipmentsByCustomerId();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -283,6 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             name: 'عرض الكل',
                             icon: Icons.view_list_outlined,
                             onPressed: () {
+                              BlocProvider.of<PickupCubit>(context)
+                                  .getPickupsByCustomerId();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

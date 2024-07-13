@@ -13,12 +13,14 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
 @Table(name = "customer")
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 
 public class Customer {
 	
@@ -31,21 +33,23 @@ public class Customer {
 	private String name;
 	
 	@Column(name="password")
+	@JsonIgnore
+
 	private String password;
 	
 	@Column(name="phoneNumber")
 	private int phoneNumber;
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
-	@JsonManagedReference
-	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    //@JsonIgnoreProperties("customer")
 	private List<CustomerAddress> addresses;
 	
 	@OneToMany(mappedBy = "customer" , cascade =CascadeType.REFRESH)
-//	@JsonManagedReference
-	@JsonBackReference
+	@JsonIgnore
 	private List<Shipment> shipments;
+	
+	@OneToMany(mappedBy = "customer" , cascade =CascadeType.REFRESH)
+	@JsonIgnore
+	private List<PickUp> pickups;
 	
 	@Column
 	private String role;
@@ -106,6 +110,14 @@ public class Customer {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public List<PickUp> getPickups() {
+		return pickups;
+	}
+
+	public void setPickups(List<PickUp> pickups) {
+		this.pickups = pickups;
 	}
 	
 	

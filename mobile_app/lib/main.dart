@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/cubits/pickup_cubit/pickup_cubit.dart';
 import 'package:mobile_app/cubits/shipment_cubit/shipment_cubit.dart';
 import 'package:mobile_app/screens/CreatePickup.dart';
 import 'package:mobile_app/screens/CreateShipment.dart';
@@ -41,6 +42,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<ShipmentCubit>(
           create: (BuildContext context) => ShipmentCubit()..loadShipments(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => PickupCubit()..loadPickups(),
         ),
       ],
       child: MaterialApp(

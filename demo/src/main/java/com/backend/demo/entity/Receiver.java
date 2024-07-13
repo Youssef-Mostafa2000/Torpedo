@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="receiver")
@@ -31,7 +32,7 @@ public class Receiver {
 	private String address;
 	
 	@OneToOne(mappedBy = "receiver",cascade = CascadeType.ALL)
-	@JsonBackReference
+	@JsonIgnore
 	private Shipment shipment; 
 	
 	@Column(name = "city")

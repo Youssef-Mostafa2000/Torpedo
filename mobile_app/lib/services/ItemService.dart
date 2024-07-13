@@ -12,7 +12,7 @@ class ItemService {
   dynamic getItem(id) async {
     try {
       final response = await dio.get(
-        '$Url/items/${id}',
+        '$Url/item/${id}',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ class ItemService {
   dynamic createItem(item) async {
     try {
       final response = await dio.post(
-        '$Url/items',
+        '$Url/item',
         data: item,
         options: Options(
           headers: {

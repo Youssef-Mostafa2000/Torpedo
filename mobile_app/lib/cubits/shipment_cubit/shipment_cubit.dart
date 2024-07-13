@@ -42,6 +42,17 @@ class ShipmentCubit extends Cubit<ShipmentState> {
     }
   }
 
+  Future<void> getShipmentsByCustomerId() async {
+    emit(ShipmentsLoading());
+    try {
+      List<Shipment> shipments =
+          await ShipmentService(Dio()).getShipmentsByCustomerId();
+      emit(ShipmentsLoaded(shipments));
+    } on DioException catch (e) {
+      emit(ShipmentsFailure(e.response!.data['message']));
+    }
+  }
+
   Future<void> updateShipment(id, shipment) async {
     emit(ShipmentLoading());
     try {

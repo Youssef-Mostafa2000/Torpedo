@@ -67,9 +67,7 @@ public class DeliveryAgentController {
 	
 	@PostMapping(value="/agent")
 	public ResponseEntity<?> addAgent(@RequestBody DeliveryAgent myAgent) {
-		myAgent.setId(0);
-		myAgent.setRole("ROLE_AGENT");
-		myAgent.setPassword(bCryptPasswordEncoder.encode(myAgent.getPassword()));
+	
 		DeliveryAgent agent=null;
 		List<DeliveryAgent> agents =new ArrayList<DeliveryAgent>();
 

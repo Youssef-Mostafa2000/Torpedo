@@ -8,9 +8,9 @@ final class PickupsInitial extends PickupState {}
 final class PickupsLoading extends PickupState {}
 
 final class PickupsLoaded extends PickupState {
-  final List<Pickup> pickups;
+  final List<Pickup>? pickups;
 
-  PickupsLoaded(this.pickups);
+  PickupsLoaded({this.pickups});
 }
 
 final class PickupsFailure extends PickupState {

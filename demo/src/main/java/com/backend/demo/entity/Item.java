@@ -15,6 +15,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="item")
@@ -34,12 +35,9 @@ public class Item {
 	@Column(name="price")
 	private double price;
 	
-//	@ManyToOne
-//	@JoinColumn(name="shipment_id",nullable = true)
-//	@JsonBackReference
-//	@OnDelete(action = OnDeleteAction.CASCADE)
+
 	@OneToOne(mappedBy = "item",cascade = CascadeType.ALL)
-	@JsonBackReference
+	@JsonIgnore
 	private Shipment shipment;
 	
 	@Column(name = "weight")

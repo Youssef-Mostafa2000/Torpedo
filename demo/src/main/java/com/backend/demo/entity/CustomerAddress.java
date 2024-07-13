@@ -10,10 +10,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.backend.demo.serialization.CustomerIdSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
 @Table(name = "customer_address")
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+
 public class CustomerAddress {
 	
 	@Id
@@ -29,9 +35,7 @@ public class CustomerAddress {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name ="customer_id")
-   // @JsonIgnoreProperties("addresses")
-	@JsonBackReference
-	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonSerialize(using = CustomerIdSerializer.class)
 	private Customer customer;
 	
 	@Column(name = "district")

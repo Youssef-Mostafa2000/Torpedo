@@ -9,7 +9,7 @@ class User {
   final int? phoneNumber;
   final String? role;
   final List<Address>? addresses;
-  final List<Shipment>? shipments;
+  // final List<Shipment>? shipments;
 
   User({
     required this.id,
@@ -17,7 +17,7 @@ class User {
     required this.phoneNumber,
     required this.role,
     required this.addresses,
-    required this.shipments,
+    // required this.shipments,
   });
 
   factory User.fromJson(json) {
@@ -25,9 +25,9 @@ class User {
     List<Address> addressesList =
         addrList.map((i) => Address.fromJson(i)).toList();
 
-    var shipList = json['shipments'] as List;
-    List<Shipment> shipmentsList =
-        shipList.map((i) => Shipment.fromJson(i)).toList();
+    // var shipList = json['shipments'] as List;
+    // List<Shipment> shipmentsList =
+    //     shipList.map((i) => Shipment.fromJson(i)).toList();
 
     return User(
       id: json['id'],
@@ -35,7 +35,7 @@ class User {
       phoneNumber: json['phoneNumber'],
       role: json['role'],
       addresses: addressesList,
-      shipments: shipmentsList,
+      // shipments: shipmentsList,
     );
   }
 

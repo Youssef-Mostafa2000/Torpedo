@@ -12,7 +12,7 @@ class ReceiverService {
   dynamic getReceiver(id) async {
     try {
       final response = await dio.post(
-        '$Url/receivers/${id}',
+        '$Url/receiver/${id}',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ class ReceiverService {
   dynamic createReceiver(receiver) async {
     try {
       final response = await dio.post(
-        '$Url/receivers',
+        '$Url/receiver',
         data: receiver,
         options: Options(
           headers: {

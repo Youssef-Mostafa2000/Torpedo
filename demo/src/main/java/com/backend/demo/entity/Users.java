@@ -12,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -31,6 +34,8 @@ public class Users {
 	private String lastName;
 	
 	@Column(name="password")
+	@JsonIgnore
+
 	private String password;
 	
 	@Column(name="phoneNumber")

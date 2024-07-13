@@ -12,8 +12,9 @@ class PickupCubit extends Cubit<PickupState> {
   Future<void> createPickup(data) async {
     emit(PickupsLoading());
     try {
-      PickupService(Dio()).createPickup(data);
-      loadPickups();
+      await PickupService(Dio()).createPickup(data);
+      emit(PickupsLoaded());
+      // loadPickups();
     } catch (e) {
       emit(PickupsFailure(e.toString()));
     }
@@ -22,8 +23,20 @@ class PickupCubit extends Cubit<PickupState> {
   Future<void> loadPickups() async {
     emit(PickupsLoading());
     try {
-      List<Pickup> pickups = PickupService(Dio()).getPickups();
-      emit(PickupsLoaded(pickups));
+      List<Pickup> pickups =
+          await PickupService(Dio()).getPickupsByCustomerId();
+      emit(PickupsLoaded(pickups: pickups));
+    } catch (e) {
+      emit(PickupsFailure(e.toString()));
+    }
+  }
+
+  Future<void> getPickupsByCustomerId() async {
+    emit(PickupsLoading());
+    try {
+      List<Pickup> pickups =
+          await PickupService(Dio()).getPickupsByCustomerId();
+      emit(PickupsLoaded(pickups: pickups));
     } catch (e) {
       emit(PickupsFailure(e.toString()));
     }
@@ -32,7 +45,7 @@ class PickupCubit extends Cubit<PickupState> {
   Future<void> getPickup(id) async {
     emit(PickupLoading());
     try {
-      Pickup pickup = PickupService(Dio()).getPickupById(id);
+      Pickup pickup = await PickupService(Dio()).getPickupById(id);
       emit(PickupLoaded(pickup));
     } catch (e) {
       emit(PickupFailure(e.toString()));
@@ -42,8 +55,9 @@ class PickupCubit extends Cubit<PickupState> {
   Future<void> updatePickup(id, data) async {
     emit(PickupLoading());
     try {
-      PickupService(Dio()).updatePickup(id, data);
-      loadPickups();
+      await PickupService(Dio()).updatePickup(id, data);
+      // loadPickups();
+      emit(PickupsLoaded());
     } catch (e) {
       emit(PickupFailure(e.toString()));
     }
@@ -52,8 +66,9 @@ class PickupCubit extends Cubit<PickupState> {
   Future<void> deletePickup(id) async {
     emit(PickupLoading());
     try {
-      PickupService(Dio()).deletePickup(id);
-      loadPickups();
+      await PickupService(Dio()).deletePickup(id);
+      // loadPickups();
+      emit(PickupsLoaded());
     } catch (e) {
       emit(PickupFailure(e.toString()));
     }
