@@ -53,6 +53,9 @@ public class Customer {
 	
 	@Column
 	private String role;
+	
+	@Column
+	private double balance;
 
 	public Customer() {}
 
@@ -118,6 +121,14 @@ public class Customer {
 
 	public void setPickups(List<PickUp> pickups) {
 		this.pickups = pickups;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 	
 	
