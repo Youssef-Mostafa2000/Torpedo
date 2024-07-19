@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/cubits/shipment_cubit/shipment_cubit.dart';
 import 'package:mobile_app/screens/Home.dart';
+import 'package:mobile_app/screens/Login.dart';
 import 'package:mobile_app/widgets/Button.dart';
+import 'package:mobile_app/widgets/CustomSelectionMenu.dart';
 import 'package:mobile_app/widgets/InputTextField.dart';
 import 'package:mobile_app/widgets/SelectionMenu.dart';
 import 'package:mobile_app/widgets/StepProgressView.dart';
@@ -51,6 +56,7 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   String service_type = '';
   double price = 0;
   bool? open_shipment = null;
+  String shipment_constraints = '';
 
   // تفاصيل الطرد
   /*int items_count = 1;
@@ -62,6 +68,8 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   String reference_number = '';*/
 
   final _itemsNumController = TextEditingController();
+  final _itemNameController = TextEditingController();
+
   final _shipmentWeightController = TextEditingController();
   final _shipmentLengthController = TextEditingController();
   final _shipmentWidthController = TextEditingController();
@@ -80,6 +88,44 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   void nextStep() {
     if (_currentStep == 2) {
       // create shipment api
+      dynamic shipment_data = {
+        'shipment': {
+          "orderPrice": price * (int.tryParse(_itemsNumController.text) ?? 1),
+          // price * int.parse(_itemsNumController.text),
+          "status": "New",
+          "receiver": {
+            'id': 0,
+          },
+          "customer": {
+            'id': 0,
+          },
+          "item": {
+            'id': 0,
+          },
+          /*"deliveryAgent": {
+            'id': Null,
+          },*/
+          "service": service_type,
+          "shipmentConstrains": open_shipment == true ? 'Open' : 'Don\'t Open',
+        },
+        'item': {
+          'name': _itemNameController.text,
+          'price': price,
+          'quantity': int.tryParse(_itemsNumController.text) ?? 1,
+          'weight': _shipmentWeightController.text,
+          'description': _shipmentDescriptionController.text,
+          'referenceNumber': _shipmentReferenceNumberController.text,
+        },
+        'receiver': {
+          "name": _nameController.text,
+          "phoneNumber": int.tryParse(_phoneNumberController.text) ?? 1,
+          "address": _addressController.text,
+          "city": receiver_city != '' ? receiver_city : 'Cairo',
+          "district": _districtController.text,
+          "notes": "",
+        },
+      };
+      BlocProvider.of<ShipmentCubit>(context).createShipment(shipment_data);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -94,38 +140,58 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 50,
-            horizontal: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CustomAppBar(
-                  title: 'شحنة جديدة',
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is LoginSuccess) {
+            return SizedBox(
+              height: double.infinity,
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 50,
+                  horizontal: 20,
                 ),
-                StepProgressView(
-                  curStep: _currentStep,
-                  titles: titles,
-                  width: double.infinity,
-                  color: Theme.of(context).primaryColor,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      CustomAppBar(
+                        title: 'شحنة جديدة',
+                      ),
+                      StepProgressView(
+                        curStep: _currentStep,
+                        titles: titles,
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      _currentStep == 0
+                          ? ShippingDetails(context, nextStep)
+                          : _currentStep == 1
+                              ? ShipmentDetails(context, nextStep)
+                              : ReceiverDetails(context, nextStep)
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                _currentStep == 0
-                    ? ShippingDetails(context, nextStep)
-                    : _currentStep == 1
-                        ? ShipmentDetails(context, nextStep)
-                        : ReceiverDetails(context, nextStep)
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return Container(
+              child: const Center(
+                child: Text('Login is required'),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -134,24 +200,7 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
     final _shipmentPrice = TextEditingController();
     return Column(
       children: [
-        Row(
-          textDirection: TextDirection.rtl,
-          children: [
-            Text(
-              'نوع الخدمة',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-              ),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        SelectionMenu(
-          hint: 'اختر نوع الخدمة',
-          textDirection: TextDirection.rtl,
-          onChanged: (val) {},
+        CustomSelectionMenu(
           items: const [
             'تسليم كامل للطرد',
             'تسليم جزء من الطرد',
@@ -159,6 +208,14 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
             'استرجاع طرد',
             'تسليم اموال'
           ],
+          onChanged: (val) {
+            setState(() {
+              service_type = val;
+            });
+          },
+          hint: 'اختر نوع الخدمة',
+          selectedItem: service_type,
+          label: 'نوع الخدمة',
         ),
         const SizedBox(
           height: 10,
@@ -172,25 +229,19 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          textDirection: TextDirection.rtl,
-          children: [
-            Text(
-              'فتح الطرد',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-              ),
-            )
-          ],
-        ),
-        SelectionMenu(
-          hint: 'فتح الطرد',
-          textDirection: TextDirection.rtl,
-          onChanged: (val) {},
-          items: [
+        CustomSelectionMenu(
+          items: const [
             'مسموح بفتح الطرد',
             'غير مسموح بفتح الطرد',
           ],
+          onChanged: (val) {
+            setState(() {
+              shipment_constraints = val;
+            });
+          },
+          hint: 'فتح الطرد',
+          selectedItem: shipment_constraints,
+          label: 'فتح الطرد',
         ),
         SizedBox(
           height: 40,
@@ -267,7 +318,7 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           height: 10,
         ),
         InputTextField(
-          controller: _shipmentWeightController,
+          controller: _shipmentDescriptionController,
           label: 'وصف الطرد',
           hint: 'مواصفات الطرد',
         ),
@@ -275,10 +326,9 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           height: 10,
         ),
         InputTextField(
-          controller: _shipmentWeightController,
+          controller: _shipmentReferenceNumberController,
           label: 'الرقم المرجعي',
           hint: '',
-          prefixText: 'كجم',
         ),
         const SizedBox(
           height: 40,
@@ -349,8 +399,13 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
                   SelectionMenu(
                     hint: 'اختر المحافظة',
                     textDirection: TextDirection.rtl,
-                    onChanged: (val) {},
-                    items: [],
+                    onChanged: (val) {
+                      setState(() {
+                        receiver_city = val;
+                      });
+                    },
+                    items: cities,
+                    currentChoice: receiver_city,
                   ),
                 ],
               ),

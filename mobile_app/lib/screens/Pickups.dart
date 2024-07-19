@@ -58,6 +58,7 @@ class _PickupsScreenState extends State<PickupsScreen> {
                           ),
                           SearchField(
                             controller: _searchController,
+                            onChanged: (val) {},
                           ),
                           const SizedBox(
                             height: 20,

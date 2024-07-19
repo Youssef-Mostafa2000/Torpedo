@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.backend.demo.serialization.CustomerSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -54,6 +56,7 @@ public class Shipment {
 
 	@ManyToOne
 	@JoinColumn(name = "deliveryagent_id")
+	@Nullable
 	private DeliveryAgent deliveryAgent;
 
 	@Column(name = "service")

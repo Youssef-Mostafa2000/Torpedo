@@ -12,9 +12,9 @@ class Item {
     required this.name,
     required this.price,
     required this.quantity,
-    required this.weight,
-    required this.description,
-    required this.referenceNumber,
+    this.weight,
+    this.description,
+    this.referenceNumber,
   });
 
   factory Item.fromJson(json) {

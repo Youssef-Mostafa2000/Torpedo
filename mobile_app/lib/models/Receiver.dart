@@ -21,7 +21,7 @@ class Receiver {
     return Receiver(
       id: json['id'],
       name: json['name'],
-      phoneNumber: json['phoneNumber'],
+      phoneNumber: json['phoneNumber'].toString(),
       city: json['city'],
       district: json['district'],
       address: json['address'],

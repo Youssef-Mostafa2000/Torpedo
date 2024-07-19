@@ -62,6 +62,7 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
                           ),
                           SearchField(
                             controller: _searchController,
+                            onChanged: (val) {},
                           ),
                           const SizedBox(
                             height: 20,

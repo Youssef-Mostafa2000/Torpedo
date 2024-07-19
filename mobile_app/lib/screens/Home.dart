@@ -244,6 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             name: 'البحث والإستعلام',
                             icon: Icons.search_outlined,
                             onPressed: () {
+                              BlocProvider.of<ShipmentCubit>(context)
+                                  .emit(ShipmentsInitial());
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -300,6 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             name: 'البحث والإستعلام',
                             icon: Icons.search_outlined,
                             onPressed: () {
+                              BlocProvider.of<PickupCubit>(context)
+                                  .emit(PickupsInitial());
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

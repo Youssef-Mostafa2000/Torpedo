@@ -41,10 +41,10 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
         ),
         BlocProvider<ShipmentCubit>(
-          create: (BuildContext context) => ShipmentCubit()..loadShipments(),
+          create: (BuildContext context) => ShipmentCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => PickupCubit()..loadPickups(),
+          create: (BuildContext context) => PickupCubit(),
         ),
       ],
       child: MaterialApp(

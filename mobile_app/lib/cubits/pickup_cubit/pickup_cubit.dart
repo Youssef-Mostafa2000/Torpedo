@@ -52,6 +52,27 @@ class PickupCubit extends Cubit<PickupState> {
     }
   }
 
+  Future<void> searchPickups(id) async {
+    if (id.toString() == '') {
+      emit(PickupsInitial());
+      return;
+    }
+    emit(PickupsLoading());
+    try {
+      List<Pickup> pickups =
+          await PickupService(Dio()).getPickupsByCustomerId();
+      List<Pickup> filtered_pickups = [];
+      for (Pickup pickup in pickups) {
+        if (pickup.id.toString().contains(id.toString())) {
+          filtered_pickups.add(pickup);
+        }
+      }
+      emit(PickupsLoaded(pickups: filtered_pickups));
+    } on DioException catch (e) {
+      emit(PickupsFailure(e.response!.data['message']));
+    }
+  }
+
   Future<void> updatePickup(id, data) async {
     emit(PickupLoading());
     try {

@@ -59,7 +59,11 @@ public class ShipmentController {
 
 					shipmentDto.setId(shipments.get(i).getId());
 					shipmentDto.setCustomerId(shipments.get(i).getCustomer().getId());
-					shipmentDto.setDeliveryAgentId(shipments.get(i).getDeliveryAgent().getId());
+					if(shipments.get(i).getDeliveryAgent()!=null) {
+						shipmentDto.setDeliveryAgentId(shipments.get(i).getDeliveryAgent().getId());
+						
+					}
+
 					shipmentDto.setItem(shipments.get(i).getItem());
 					shipmentDto.setOrderPrice(shipments.get(i).getOrderPrice());
 					shipmentDto.setReceiver(shipments.get(i).getReceiver());
@@ -76,6 +80,7 @@ public class ShipmentController {
 				return new ResponseEntity<>(new ShipmentResponseDto("There is no Shipments in DB", shipmentDtos), HttpStatus.OK);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(new ShipmentResponseDto("something went wrong", shipmentDtos), HttpStatus.NOT_FOUND);
 
 		}
@@ -133,7 +138,7 @@ public class ShipmentController {
 	public ResponseEntity<?> addItem(@RequestBody Shipment shipment){
 		Shipment myShipment= null;
 		List<Shipment> shipments =new ArrayList<Shipment>();
-
+//		shipment.getDeliveryAgent().setId(null);
 		try {
 			myShipment=shipmentService.addShipment(shipment);
 			shipments.add(myShipment);

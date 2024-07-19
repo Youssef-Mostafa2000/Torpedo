@@ -23,8 +23,9 @@ class ShipmentService {
           },
         ),
       );
+      print(response);
       List<Shipment> shipments = [];
-      for (var e in response.data) {
+      for (var e in response.data['data']) {
         Shipment shipment = Shipment.fromJson(e);
         shipments.add(shipment);
       }
@@ -81,6 +82,7 @@ class ShipmentService {
       print(shipments);
       return shipments;
     } on DioException catch (e) {
+      print(e.toString());
       return e.toString();
     }
   }
@@ -110,10 +112,20 @@ class ShipmentService {
 
   // create shipment
   dynamic createShipment(shipment) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    String? user = prefs.getString(
+        'user'); // Assuming you store the customer ID as 'customerId'
+    Map<String, dynamic> jsonMap = json.decode(user!);
+    int id = jsonMap['id'];
+    dio.options.headers["Authorization"] = 'Bearer $token';
+
     try {
-      final response = await dio.post(
-        '$Url/shipment',
-        data: shipment,
+      // create item
+      final item_response = await dio.post(
+        '$Url/item',
+        data: shipment['item'],
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -121,7 +133,45 @@ class ShipmentService {
           },
         ),
       );
-    } on DioException catch (e) {}
+
+      print(item_response);
+      print(item_response.data['data'][0]['id']);
+
+      // create receiver
+      final receiver_response = await dio.post(
+        '$Url/receiver',
+        data: shipment['receiver'],
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+
+      print(receiver_response);
+      print(receiver_response.data['data'][0]['id']);
+
+      shipment['shipment']['item']['id'] = item_response.data['data'][0]['id'];
+      shipment['shipment']['receiver']['id'] =
+          receiver_response.data['data'][0]['id'];
+      ;
+      shipment['shipment']['customer']['id'] = id;
+
+      final response = await dio.post(
+        '$Url/shipment',
+        data: shipment['shipment'],
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      print(response);
+    } on DioException catch (e) {
+      print(e.toString());
+    }
   }
 
   // update shipment
