@@ -20,12 +20,24 @@ class Item {
   factory Item.fromJson(json) {
     return Item(
       id: json['id'],
-      name: json['name'],
-      price: json['price'],
-      quantity: json['quantity'],
-      weight: json['weight'],
-      description: json['description'],
-      referenceNumber: json['referenceNumber'],
+      name: json['name'] ?? '',
+      price: json['price'] ?? 0,
+      quantity: json['quantity'] ?? 1,
+      weight: json['weight'] ?? 1,
+      description: json['description'] ?? '',
+      referenceNumber: json['referenceNumber'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name ?? '',
+      'price': price ?? 0,
+      'quantity': quantity ?? 1,
+      'weight': weight ?? 1,
+      'description': description ?? '',
+      'referenceNumber': referenceNumber ?? '',
+    };
   }
 }

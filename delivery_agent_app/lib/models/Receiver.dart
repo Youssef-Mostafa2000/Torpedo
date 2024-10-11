@@ -20,12 +20,24 @@ class Receiver {
   factory Receiver.fromJson(json) {
     return Receiver(
       id: json['id'],
-      name: json['name'],
-      phoneNumber: json['phoneNumber'],
-      city: json['city'],
-      district: json['district'],
-      address: json['address'],
-      notes: json['notes'],
+      name: json['name'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? 0,
+      city: json['city'] ?? '',
+      district: json['district'] ?? '',
+      address: json['address'] ?? '',
+      notes: json['notes'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name ?? '',
+      'phoneNumber': phoneNumber ?? 0,
+      'city': city ?? '',
+      'district': district ?? '',
+      'address': address ?? '',
+      'notes': notes ?? '',
+    };
   }
 }

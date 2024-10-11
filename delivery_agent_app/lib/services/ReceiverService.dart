@@ -1,7 +1,9 @@
 import 'package:delivery_agent_app/models/Receiver.dart';
 import 'package:dio/dio.dart';
 
-const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://localhost:8080';
+const String Url = 'https://torpedo-backend-production.up.railway.app';
 
 class ReceiverService {
   final Dio dio;
