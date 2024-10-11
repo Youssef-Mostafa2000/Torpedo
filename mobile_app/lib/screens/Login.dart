@@ -42,10 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isPhoneNumberValid(String phoneNumber) {
     if (!phoneNumber.contains(RegExp(r'^(010|011|012|015)\d{8}$'))) {
-      setState(() {
+      /*setState(() {
         errorMessage = 'رقم الهاتف غير صحيح';
-      });
-      return false;
+      });*/
+      return true;
     }
     return true;
   }
@@ -226,18 +226,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60,
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<AuthCubit>(context).userLogin({
+                        onPressed: () async {
+                          await context.read<AuthCubit>().userLogin({
                             "phoneNumber":
                                 int.parse(_phoneNumberController.text),
                             "password": _passwordController.text
                           });
-                          Navigator.pushReplacement(
+                          /*await BlocProvider.of<AuthCubit>(context).userLogin({
+                            "phoneNumber":
+                                int.parse(_phoneNumberController.text),
+                            "password": _passwordController.text
+                          });*/
+                          //BlocProvider.of<AuthCubit>(context)
+                          /*Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const HomeScreen(),
-                              ));
-                          if (isPhoneNumberValid(_phoneNumberController.text) &&
+                              ));*/
+                          /*if (isPhoneNumberValid(_phoneNumberController.text) &&
                               isPasswordValid(_passwordController.text)) {
                             Navigator.pushReplacement(
                                 context,
@@ -258,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 backgroundColor: Colors.red,
                               ),
                             );
-                          }
+                          }*/
                           /*if (_formKey.currentState!.validate()) {
                             Navigator.pushReplacement(
                                 context,

@@ -64,7 +64,11 @@ class _ShipmentsSearchState extends State<ShipmentsSearch> {
                       controller: _searchController,
                       onChanged: (val) {
                         BlocProvider.of<ShipmentCubit>(context)
-                            .searchShipments(val);
+                            .searchShipments({
+                          'id': val,
+                          'status': '',
+                          'city': '',
+                        });
                       },
                     ),
                     const SizedBox(

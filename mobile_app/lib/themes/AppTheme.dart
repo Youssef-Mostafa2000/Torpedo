@@ -55,6 +55,10 @@ ThemeData AppTheme() => ThemeData(
         thumbColor: MaterialStatePropertyAll(Color(0xff033f73)),
         trackColor: MaterialStatePropertyAll(Color.fromARGB(255, 46, 114, 173)),
       ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        //circularTrackColor: Color(0xff033f73),
+        color: Color(0xff033f73),
+      ),
       // 0xffe98b4d --> secondary color
       //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       //useMaterial3: true,

@@ -52,8 +52,8 @@ class PickupCubit extends Cubit<PickupState> {
     }
   }
 
-  Future<void> searchPickups(id) async {
-    if (id.toString() == '') {
+  Future<void> searchPickups(data) async {
+    if (data['id'].toString() == '') {
       emit(PickupsInitial());
       return;
     }
@@ -63,7 +63,8 @@ class PickupCubit extends Cubit<PickupState> {
           await PickupService(Dio()).getPickupsByCustomerId();
       List<Pickup> filtered_pickups = [];
       for (Pickup pickup in pickups) {
-        if (pickup.id.toString().contains(id.toString())) {
+        if (pickup.id.toString().contains(data['id'].toString()) ||
+            pickup.status == data['status']) {
           filtered_pickups.add(pickup);
         }
       }

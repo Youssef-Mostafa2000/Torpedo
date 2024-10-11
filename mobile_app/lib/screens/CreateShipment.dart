@@ -53,6 +53,7 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   ];
 
   // بيانات الشحن
+  final _shipmentPrice = TextEditingController();
   String service_type = '';
   double price = 0;
   bool? open_shipment = null;
@@ -71,9 +72,6 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   final _itemNameController = TextEditingController();
 
   final _shipmentWeightController = TextEditingController();
-  final _shipmentLengthController = TextEditingController();
-  final _shipmentWidthController = TextEditingController();
-  final _shipmentHeightController = TextEditingController();
   final _shipmentDescriptionController = TextEditingController();
   final _shipmentReferenceNumberController = TextEditingController();
 
@@ -81,18 +79,18 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   String receiver_city = '';
   final _nameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  final _phoneNumberAdditionalController = TextEditingController();
+  final _receiverNotesController = TextEditingController();
   final _districtController = TextEditingController();
   final _addressController = TextEditingController();
 
-  void nextStep() {
+  void nextStep() async {
     if (_currentStep == 2) {
       // create shipment api
       dynamic shipment_data = {
         'shipment': {
-          "orderPrice": price * (int.tryParse(_itemsNumController.text) ?? 1),
+          "orderPrice": double.tryParse(_shipmentPrice.text),
           // price * int.parse(_itemsNumController.text),
-          "status": "New",
+          "status": "جديد",
           "receiver": {
             'id': 0,
           },
@@ -122,13 +120,15 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           "address": _addressController.text,
           "city": receiver_city != '' ? receiver_city : 'Cairo',
           "district": _districtController.text,
-          "notes": "",
+          "notes": _receiverNotesController.text,
         },
       };
-      BlocProvider.of<ShipmentCubit>(context).createShipment(shipment_data);
+      await BlocProvider.of<ShipmentCubit>(context)
+          .createShipment(shipment_data);
+      await BlocProvider.of<ShipmentCubit>(context).getShipmentsByCustomerId();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     }
 
@@ -197,7 +197,7 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   }
 
   Widget ShippingDetails(BuildContext context, onNext) {
-    final _shipmentPrice = TextEditingController();
+    //final _shipmentPrice = TextEditingController();
     return Column(
       children: [
         CustomSelectionMenu(
@@ -255,11 +255,9 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   }
 
   Widget ShipmentDetails(BuildContext context, onNext) {
-    final _itemsNumController = TextEditingController();
-    final _shipmentWeightController = TextEditingController();
-    final _shipmentLengthController = TextEditingController();
-    final _shipmentWidthController = TextEditingController();
-    final _shipmentHeightController = TextEditingController();
+    //final _itemsNumController = TextEditingController();
+    //final _shipmentWeightController = TextEditingController();
+
     // final _shipmentWeightController = TextEditingController();
 
     return Column(
@@ -277,42 +275,6 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           label: 'وزن الطرد',
           hint: 'أدخل وزن الطرد',
           prefixText: 'كجم',
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          textDirection: TextDirection.rtl,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.27,
-              child: InputTextField(
-                controller: _shipmentLengthController,
-                label: 'الطول',
-                hint: '',
-                prefixText: 'سم',
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.27,
-              child: InputTextField(
-                controller: _shipmentWidthController,
-                label: 'العرض',
-                hint: '',
-                prefixText: 'سم',
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.27,
-              child: InputTextField(
-                controller: _shipmentHeightController,
-                label: 'الإرتفاع',
-                hint: '',
-                prefixText: 'سم',
-              ),
-            ),
-          ],
         ),
         const SizedBox(
           height: 10,
@@ -342,11 +304,11 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
   }
 
   Widget ReceiverDetails(BuildContext context, onNext) {
-    final _nameController = TextEditingController();
-    final _phoneNumberController = TextEditingController();
-    final _phoneNumberAdditionalController = TextEditingController();
-    final _districtController = TextEditingController();
-    final _addressController = TextEditingController();
+    // final _nameController = TextEditingController();
+    // final _phoneNumberController = TextEditingController();
+    // final _receiverNotesController = TextEditingController();
+    // final _districtController = TextEditingController();
+    // final _addressController = TextEditingController();
 
     return Column(
       children: [
@@ -362,14 +324,6 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           controller: _phoneNumberController,
           label: 'رقم الموبايل',
           hint: 'أدخل رقم المرسل إليه',
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        InputTextField(
-          controller: _phoneNumberAdditionalController,
-          label: 'رقم موبايل إضافي',
-          hint: 'رقم إضافي للمرسل إليه ',
         ),
         const SizedBox(
           height: 10,
@@ -427,6 +381,14 @@ class _CreateShipmentScreenState extends State<CreateShipmentScreen> {
           controller: _addressController,
           label: 'العنوان بالتفصيل',
           hint: 'أدخل العنوان بالتفصيل',
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        InputTextField(
+          controller: _receiverNotesController,
+          label: 'ملحوظات',
+          hint: 'إضافة ملحوظة',
         ),
         const SizedBox(
           height: 40,

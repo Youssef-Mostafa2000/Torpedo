@@ -2,12 +2,15 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:mobile_app/models/Customer.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_state.dart';
 
-const String Url = 'http://10.0.2.2:8080';
+//const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://localhost:8080';
+const String Url = 'https://torpedo-backend-production.up.railway.app';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -41,17 +44,19 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
 
-      print(response.data['myCustomer']);
+      //print(response.data['myCustomer']);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      User loggedUser = User.fromJson(response.data['myCustomer']);
+      Customer loggedCustomer = Customer.fromJson(response.data['myCustomer']);
       await prefs.setBool('isLoggedIn', true);
-      await _saveUser(loggedUser, response.data['jwt']);
+      await _saveCustomer(loggedCustomer, response.data['jwt']);
 
       if (isClosed) return;
-      emit(LoginSuccess(user: loggedUser));
+      emit(LoginSuccess(customer: loggedCustomer));
     } on DioException catch (e) {
+      //print('Login Error');
+      //print(e.toString());
       if (isClosed) return;
       emit(LoginFailure(
           errorMessage: e.response?.data['message'] ?? 'An error occurred'));
@@ -75,7 +80,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       await prefs.setBool('isLoggedIn', false);
-      await _removeUser();
+      await _removeCustomer();
 
       if (isClosed) return;
       emit(AuthInitial());
@@ -89,9 +94,9 @@ class AuthCubit extends Cubit<AuthState> {
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     print('checking login');
     if (isLoggedIn) {
-      User? user = await loadUser();
-      if (user != null) {
-        emit(LoginSuccess(user: user));
+      Customer? customer = await loadCustomer();
+      if (customer != null) {
+        emit(LoginSuccess(customer: customer));
       } else {
         emit(AuthInitial());
       }
@@ -100,25 +105,25 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> _saveUser(User user, String token) async {
+  Future<void> _saveCustomer(Customer customer, String token) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = jsonEncode(user.toJson());
-    await prefs.setString('user', userJson);
+    final customerJson = jsonEncode(customer.toJson());
+    await prefs.setString('customer', customerJson);
     await prefs.setString('token', token);
   }
 
-  Future<void> _removeUser() async {
+  Future<void> _removeCustomer() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('user');
+    await prefs.remove('customer');
     await prefs.remove('token');
   }
 
-  Future<User?> loadUser() async {
+  Future<Customer?> loadCustomer() async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
-    if (userJson != null) {
-      final userMap = jsonDecode(userJson);
-      return User.fromJson(userMap);
+    final customerJson = prefs.getString('customer');
+    if (customerJson != null) {
+      final customerMap = jsonDecode(customerJson);
+      return Customer.fromJson(customerMap);
     }
     return null;
   }

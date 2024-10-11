@@ -10,6 +10,8 @@ import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/InputTextField.dart';
 import 'package:mobile_app/widgets/SelectionMenu.dart';
 
+//import 'package:intl/intl.dart';
+
 class CreatePickupScreen extends StatefulWidget {
   const CreatePickupScreen({super.key});
 
@@ -22,9 +24,11 @@ class _CreatePickupScreenState extends State<CreatePickupScreen> {
   final pickupsNotesController = TextEditingController();
   String vehicleType = '';
   final List<String> vehicleTypes = [
-    'Moto',
-    'car',
+    'موتوسيكل',
+    'سيارة',
   ];
+
+  //DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
@@ -103,15 +107,25 @@ class _CreatePickupScreenState extends State<CreatePickupScreen> {
                         ),
                         Button(
                           text: 'حفظ',
-                          onPressed: () {
+                          onPressed: () async {
                             // create pickup
-                            BlocProvider.of<PickupCubit>(context).createPickup({
+                            await BlocProvider.of<PickupCubit>(context)
+                                .createPickup({
                               'shipmentsCount':
                                   int.parse(pickupsNumController.text),
                               'vehicleType': vehicleType,
                               'notes': pickupsNotesController.text,
+                              'status': 'جديد',
+                              'date': DateTime.now().year.toString() +
+                                  '-' +
+                                  DateTime.now()
+                                      .month
+                                      .toString()
+                                      .padLeft(2, '0') +
+                                  '-' +
+                                  DateTime.now().day.toString().padLeft(2, '0')
                             });
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const HomeScreen(),

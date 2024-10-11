@@ -58,6 +58,13 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def apkName = "Torpedo-${variant.buildType.name}.apk"
+            outputFileName = apkName
+        }
+    }
 }
 
 flutter {

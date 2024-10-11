@@ -48,15 +48,16 @@ class ShipmentCubit extends Cubit<ShipmentState> {
     emit(ShipmentsLoading());
     try {
       List<Shipment> shipments =
-          await ShipmentService(Dio()).getShipmentsByCustomerId();
+          await ShipmentService(Dio()).getShipmentsByCustomerId() ??
+              <Shipment>[];
       emit(ShipmentsLoaded(shipments: shipments));
     } on DioException catch (e) {
       emit(ShipmentsFailure(e.response!.data['message']));
     }
   }
 
-  Future<void> searchShipments(id) async {
-    if (id.toString() == '') {
+  Future<void> searchShipments(data) async {
+    if (data['id'].toString() == '') {
       emit(ShipmentsInitial());
       return;
     }
@@ -66,10 +67,13 @@ class ShipmentCubit extends Cubit<ShipmentState> {
           await ShipmentService(Dio()).getShipmentsByCustomerId();
       List<Shipment> filtered_shipments = [];
       for (Shipment shipment in shipments) {
-        if (shipment.id.toString().contains(id.toString())) {
+        if (shipment.id.toString().contains(data['id'].toString()) ||
+            shipment.status == data['status'] ||
+            shipment.receiver!.city == data['city']) {
           filtered_shipments.add(shipment);
         }
       }
+      print(filtered_shipments);
       emit(ShipmentsLoaded(shipments: filtered_shipments));
     } on DioException catch (e) {
       emit(ShipmentsFailure(e.response!.data['message']));

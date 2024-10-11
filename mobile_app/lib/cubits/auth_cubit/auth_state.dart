@@ -24,9 +24,9 @@ final class RegisterFailure extends AuthState {
 final class LoginInitial extends AuthState {}
 
 final class LoginSuccess extends AuthState {
-  final User? user;
+  final Customer? customer;
 
-  LoginSuccess({this.user});
+  LoginSuccess({this.customer});
 }
 
 final class LoginLoading extends AuthState {}

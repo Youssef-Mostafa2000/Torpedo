@@ -19,9 +19,15 @@ import 'package:mobile_app/screens/Splash.dart';
 import 'package:mobile_app/screens/UserProfile.dart';
 import 'package:mobile_app/screens/Wallet.dart';
 import 'package:mobile_app/themes/AppTheme.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      builder: (context) => const MyApp(),
+      //enabled: false,
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -35,7 +41,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      //create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
       providers: [
         BlocProvider<AuthCubit>(
           create: (BuildContext context) => AuthCubit()..checkLoginStatus(),
@@ -49,6 +54,9 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         // initialRoute: '/login',
         title: 'Torpedo',
         theme: AppTheme(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/models/Customer.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:mobile_app/screens/Login.dart';
 import 'package:mobile_app/screens/UserProfile.dart';
@@ -29,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (state is LoginSuccess) {
-            final User user = state.user!;
+            final Customer customer = state.customer!;
 
             return SizedBox(
               height: double.infinity,
@@ -64,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
                           width: 20,
                         ),
                         Text(
-                          user.name!,
+                          customer.name!,
                           style: TextStyle(
                             fontSize: 20,
                           ),

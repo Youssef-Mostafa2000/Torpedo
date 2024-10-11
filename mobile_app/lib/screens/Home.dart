@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
 import 'package:mobile_app/cubits/pickup_cubit/pickup_cubit.dart';
 import 'package:mobile_app/cubits/shipment_cubit/shipment_cubit.dart';
+import 'package:mobile_app/models/Customer.dart';
+import 'package:mobile_app/models/Shipment.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:mobile_app/screens/CreatePickup.dart';
 import 'package:mobile_app/screens/CreateShipment.dart';
@@ -13,6 +15,7 @@ import 'package:mobile_app/screens/Settings.dart';
 import 'package:mobile_app/screens/Shipments.dart';
 import 'package:mobile_app/screens/ShipmentsSearch.dart';
 import 'package:mobile_app/screens/Wallet.dart';
+import 'package:mobile_app/screens/ExcelSheet.dart';
 import 'package:mobile_app/widgets/Menu.dart';
 import 'package:mobile_app/widgets/MenuItem.dart';
 import 'package:mobile_app/widgets/ShipmentStatusList.dart';
@@ -25,16 +28,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoading = false;
+  List<Shipment> shipments = [];
+
+  void load() async {
+    setState(() {
+      isLoading = true;
+    });
+    await BlocProvider.of<ShipmentCubit>(context).getShipmentsByCustomerId();
+    await BlocProvider.of<PickupCubit>(context).getPickupsByCustomerId();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    // Ensure that we are checking the login status in the cubit.
-    BlocProvider.of<AuthCubit>(context).checkLoginStatus();
+    context.read<AuthCubit>().checkLoginStatus();
+    load();
   }
 
   @override
   Widget build(BuildContext context) {
-    String balance = "1000";
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
@@ -51,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (state is LoginSuccess) {
-            final User user = state.user!;
+            final Customer customer = state.customer!;
             return SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -95,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'أهلا ${user.name}',
+                            'أهلا ${customer.name}',
                             style: TextStyle(
                               fontSize: 30,
                               color: Theme.of(context).primaryColor,
@@ -151,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '$balance جنيه',
+                                      '${customer.balance} جنيه',
                                       style: TextStyle(
                                         fontSize: 28,
                                         color: Theme.of(context).primaryColor,
@@ -199,13 +215,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           const ShipmentsScreen(),
-                                    ));
+                                    )).whenComplete(() => load());
                               },
                             ),
                           ],
                         ),
                       ),
-                      const ShipmentStatusList(),
+                      isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : const ShipmentStatusList(),
                       Padding(
                         padding: const EdgeInsets.only(top: 30.0, bottom: 15),
                         child: Row(
@@ -236,9 +256,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                           MenuItem(
-                            name: 'تتبع الشحنة',
-                            icon: Icons.local_shipping_outlined,
-                            onPressed: () {},
+                            name: 'إضافة طلبات من شيت',
+                            icon: Icons.upload_file_outlined,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ExcelSheetScreen()));
+                            },
                           ),
                           MenuItem(
                             name: 'البحث والإستعلام',

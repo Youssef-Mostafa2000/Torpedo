@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/cubits/auth_cubit/auth_cubit.dart';
+import 'package:mobile_app/models/Customer.dart';
 import 'package:mobile_app/models/User.dart';
 import 'package:mobile_app/screens/Login.dart';
 import 'package:mobile_app/widgets/Button.dart';
@@ -49,10 +50,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (state is LoginSuccess) {
-            final User user = state.user!;
-            _firstNameController.text = user.name!;
-            _lastNameController.text = user.name!;
-            _phoneNumberController.text = user.phoneNumber.toString();
+            final Customer customer = state.customer!;
+            _firstNameController.text = customer.name!;
+            _lastNameController.text = customer.name!;
+            _phoneNumberController.text = customer.phoneNumber.toString();
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(

@@ -5,6 +5,8 @@ class Pickup {
   final int? id;
   final int? shipmentsCount;
   final int? pickedShipments;
+  final int? agentId;
+  final int? customerId;
   final String? vehicleType;
   final String? status;
   final String? notes;
@@ -22,6 +24,8 @@ class Pickup {
     this.customer,
     this.status,
     this.date,
+    this.agentId,
+    this.customerId,
   });
 
   factory Pickup.fromJson(json) {
@@ -35,11 +39,13 @@ class Pickup {
       date: json['date'] != null
           ? DateTime.tryParse(json['date'])
           : DateTime.now(),
-      deliveryAgent: json['deliveryAgent'] != null
-          ? DeliveryAgent.fromJson(json['deliveryAgent'])
-          : null,
-      customer:
-          json['customer'] != null ? Customer.fromJson(json['customer']) : null,
+      // deliveryAgent: json['deliveryAgent'] != null
+      //     ? DeliveryAgent.fromJson(json['deliveryAgent'])
+      //     : null,
+      // customer:
+      //     json['customer'] != null ? Customer.fromJson(json['customer']) : null,
+      agentId: json['agentId'],
+      customerId: json['customerId'],
     );
   }
 
@@ -52,8 +58,10 @@ class Pickup {
       'notes': notes,
       'status': status,
       'date': date,
-      'customer': customer?.toJson(),
-      'deliveryAgent': deliveryAgent?.toJson()
+      'agentId': agentId,
+      'customerId': customerId,
+      // 'customer': customer?.toJson(),
+      // 'deliveryAgent': deliveryAgent?.toJson()
     };
   }
 }

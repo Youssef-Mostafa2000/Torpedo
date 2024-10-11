@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:mobile_app/models/Pickup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://localhost:8080';
+const String Url = 'https://torpedo-backend-production.up.railway.app';
 
 class PickupService {
   final Dio dio;
@@ -65,9 +67,9 @@ class PickupService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
-    String? user = prefs.getString(
-        'user'); // Assuming you store the customer ID as 'customerId'
-    Map<String, dynamic> jsonMap = json.decode(user!);
+    String? customer = prefs.getString(
+        'customer'); // Assuming you store the customer ID as 'customerId'
+    Map<String, dynamic> jsonMap = json.decode(customer!);
     int id = jsonMap['id'];
     dio.options.headers["Authorization"] = 'Bearer $token';
     try {
@@ -85,6 +87,7 @@ class PickupService {
         Pickup pickup = Pickup.fromJson(e);
         pickups.add(pickup);
       }
+      print(response.data);
       return pickups;
     } on DioException catch (e) {
       return e.toString();
@@ -122,15 +125,15 @@ class PickupService {
   dynamic createPickup(data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    String? user = prefs.getString(
-        'user'); // Assuming you store the customer ID as 'customerId'
-    Map<String, dynamic> jsonMap = json.decode(user!);
+    String? customer = prefs.getString(
+        'customer'); // Assuming you store the customer ID as 'customerId'
+    Map<String, dynamic> jsonMap = json.decode(customer!);
     int id = jsonMap['id'];
-    print("****************" + (id).toString());
+    // print("****************" + (id).toString());
 
     dio.options.headers["Authorization"] = 'Bearer $token';
     data['customer'] = {'id': id}; // Add customer ID to the data
-
+    print(data);
     try {
       final response = await dio.post(
         '$Url/pickup',

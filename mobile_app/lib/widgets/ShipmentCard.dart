@@ -20,6 +20,14 @@ class ShipmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Color> colorsMap = {
+      'جديد': Theme.of(context).primaryColor,
+      'في المخزن': const Color(0xffFFCC3D),
+      'تم التسليم': const Color(0xff13CE66),
+      'إعادة التوصيل': Colors.lightBlue,
+      'تعذر التسليم': Colors.red,
+      'قيد التوصيل': const Color(0xffEA8A4E),
+    };
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
@@ -48,13 +56,13 @@ class ShipmentCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
                           ),
-                          color: Colors.green,
+                          color: colorsMap[status],
                         ),
-                        width: 60,
+                        width: 80,
                         height: 30,
                         child: Center(
                           child: Text(

@@ -65,8 +65,10 @@ class _PickupsSearchScreenState extends State<PickupsSearchScreen> {
                     SearchField(
                       controller: _searchController,
                       onChanged: (val) {
-                        BlocProvider.of<PickupCubit>(context)
-                            .searchPickups(val);
+                        BlocProvider.of<PickupCubit>(context).searchPickups({
+                          'id': val,
+                          'status': '',
+                        });
                       },
                     ),
                     const SizedBox(

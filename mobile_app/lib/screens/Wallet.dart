@@ -102,22 +102,22 @@ class WalletScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'الشحنات التي تم تسليمها',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 20,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              DeliveredShipmentsList(),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.end,
+              //     children: [
+              //       Text(
+              //         'الشحنات التي تم تسليمها',
+              //         style: TextStyle(
+              //           color: Theme.of(context).primaryColor,
+              //           fontSize: 20,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
+              // DeliveredShipmentsList(),
             ],
           ),
         ),

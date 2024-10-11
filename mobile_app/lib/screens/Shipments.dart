@@ -23,6 +23,7 @@ class ShipmentsScreen extends StatefulWidget {
 
 class _ShipmentsScreenState extends State<ShipmentsScreen> {
   final _searchController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +61,14 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
                           const CustomAppBar(
                             title: 'الشحنات',
                           ),
-                          SearchField(
+                          /*SearchField(
                             controller: _searchController,
                             onChanged: (val) {},
                           ),
                           const SizedBox(
                             height: 20,
-                          ),
-                          const ShipmentsScreenStatusList(),
+                          ),*/
+                          ShipmentsScreenStatusList(),
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 10.0, bottom: 15),
@@ -126,67 +127,48 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
                               ],
                             ),
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: shipments.length,
-                              itemBuilder: (context, index) => ShipmentCard(
-                                id: shipments[index].id.toString(),
-                                name: shipments[index].receiver!.name ?? '',
-                                city: shipments[index].receiver!.city ?? '',
-                                district:
-                                    shipments[index].receiver!.district ?? '',
-                                phoneNumber:
-                                    shipments[index].receiver!.phoneNumber ??
-                                        '',
-                                status: shipments[index].status ?? 'جديد',
-                                date: shipments[index].date ?? DateTime.now(),
-                              ),
-                            ),
-                            /* ListView(
-                              shrinkWrap: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              children: [
-                                ShipmentCard(
-                                  id: '123456',
-                                  name: 'يوسف مصطفى زكريا يوسف',
-                                  city: 'القاهرة',
-                                  district: 'عين شمس',
-                                  phoneNumber: '01112367131',
-                                  status: 'جديد',
-                                  date: DateTime(2024, 5, 1),
-                                ),
-                                ShipmentCard(
-                                  id: '123456',
-                                  name: 'يوسف مصطفى زكريا يوسف',
-                                  city: 'القاهرة',
-                                  district: 'عين شمس',
-                                  phoneNumber: '01112367131',
-                                  status: 'جديد',
-                                  date: DateTime(2024, 5, 1),
-                                ),
-                                ShipmentCard(
-                                  id: '123456',
-                                  name: 'يوسف مصطفى زكريا يوسف',
-                                  city: 'القاهرة',
-                                  district: 'عين شمس',
-                                  phoneNumber: '01112367131',
-                                  status: 'جديد',
-                                  date: DateTime(2024, 5, 1),
-                                ),
-                                ShipmentCard(
-                                  id: '123456',
-                                  name: 'يوسف مصطفى زكريا يوسف',
-                                  city: 'القاهرة',
-                                  district: 'عين شمس',
-                                  phoneNumber: '01112367131',
-                                  status: 'جديد',
-                                  date: DateTime(2024, 5, 1),
+                          isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
                                 )
-                              ],
-                            ),*/
-                          ),
+                              : Expanded(
+                                  child: shipments.length > 0
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(),
+                                          itemCount: shipments.length,
+                                          itemBuilder: (context, index) =>
+                                              ShipmentCard(
+                                            id: shipments[index].id.toString(),
+                                            name: shipments[index]
+                                                    .receiver!
+                                                    .name ??
+                                                '',
+                                            city: shipments[index]
+                                                    .receiver!
+                                                    .city ??
+                                                '',
+                                            district: shipments[index]
+                                                    .receiver!
+                                                    .district ??
+                                                '',
+                                            phoneNumber: shipments[index]
+                                                    .receiver!
+                                                    .phoneNumber ??
+                                                '',
+                                            status: shipments[index].status ??
+                                                'جديد',
+                                            date: shipments[index].date ??
+                                                DateTime.now(),
+                                          ),
+                                        )
+                                      : const Center(
+                                          child: Text(
+                                            'لا يوجد طلبات',
+                                          ),
+                                        ),
+                                ),
                         ],
                       ),
                     ),

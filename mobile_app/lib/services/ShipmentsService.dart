@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:mobile_app/models/Shipment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://10.0.2.2:8080';
+// const String Url = 'http://localhost:8080';
+const String Url = 'https://torpedo-backend-production.up.railway.app';
 
 class ShipmentService {
   final Dio dio;
@@ -58,9 +60,9 @@ class ShipmentService {
   dynamic getShipmentsByCustomerId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    String? user = prefs.getString(
-        'user'); // Assuming you store the customer ID as 'customerId'
-    Map<String, dynamic> jsonMap = json.decode(user!);
+    String? customer = prefs.getString(
+        'customer'); // Assuming you store the customer ID as 'customerId'
+    Map<String, dynamic> jsonMap = json.decode(customer!);
     int id = jsonMap['id'];
     dio.options.headers["Authorization"] = 'Bearer $token';
     try {
@@ -83,7 +85,8 @@ class ShipmentService {
       return shipments;
     } on DioException catch (e) {
       print(e.toString());
-      return e.toString();
+      return <Shipment>[];
+      //return e.toString();
     }
   }
 
@@ -91,7 +94,7 @@ class ShipmentService {
   dynamic getShipmentsByDeliveryAgentId(id) async {
     try {
       final response = await dio.get(
-        '$Url/shipment/customer/${id}',
+        '$Url/shipment/deliveryAgent/${id}',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -115,9 +118,9 @@ class ShipmentService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
-    String? user = prefs.getString(
-        'user'); // Assuming you store the customer ID as 'customerId'
-    Map<String, dynamic> jsonMap = json.decode(user!);
+    String? customer = prefs.getString(
+        'customer'); // Assuming you store the customer ID as 'customerId'
+    Map<String, dynamic> jsonMap = json.decode(customer!);
     int id = jsonMap['id'];
     dio.options.headers["Authorization"] = 'Bearer $token';
 

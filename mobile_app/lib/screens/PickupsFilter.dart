@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/cubits/pickup_cubit/pickup_cubit.dart';
 import 'package:mobile_app/widgets/Button.dart';
 import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/CustomSelectionMenu.dart';
@@ -17,7 +19,11 @@ class _PickupsFilterScreenState extends State<PickupsFilterScreen> {
   late String statusCurrentChoice = '';
   DateTime fromDate = DateTime.now().subtract(Duration(days: 7));
   DateTime toDate = DateTime.now();
-  final List<String> statusItems = ['Items1', 'Items2'];
+  final List<String> statusItems = [
+    'جديد',
+    'تم الإلتقاط',
+    'تم الإلغاء',
+  ];
   final List<String> cityItems = [
     'الإسكندرية',
     'الإسماعيلية',
@@ -66,7 +72,7 @@ class _PickupsFilterScreenState extends State<PickupsFilterScreen> {
                   title: 'تصنيف',
                 ),
                 CustomSelectionMenu(
-                  items: const ['تم الإلتقاط', 'تم الإلغاء'],
+                  items: statusItems,
                   onChanged: (value) => setState(() {
                     statusCurrentChoice = value;
                   }),
@@ -77,7 +83,7 @@ class _PickupsFilterScreenState extends State<PickupsFilterScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                CustomSelectionMenu(
+                /*CustomSelectionMenu(
                   items: cityItems,
                   onChanged: (value) => setState(() {
                     cityCurrentChoice = value;
@@ -88,7 +94,7 @@ class _PickupsFilterScreenState extends State<PickupsFilterScreen> {
                 ),
                 const SizedBox(
                   height: 10,
-                ),
+                ),*/
                 Column(
                   textDirection: TextDirection.rtl,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +142,11 @@ class _PickupsFilterScreenState extends State<PickupsFilterScreen> {
                 Button(
                   text: 'حفظ',
                   onPressed: () {
+                    BlocProvider.of<PickupCubit>(context).searchPickups({
+                      'id': '-',
+                      'status': statusCurrentChoice,
+                      //'city': cityCurrentChoice,
+                    });
                     Navigator.pop(context);
                   },
                 ),

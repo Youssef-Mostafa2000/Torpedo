@@ -5,6 +5,7 @@ class Customer {
   final String? name;
   final int? phoneNumber;
   final String? role;
+  final double? balance;
   final List<Address>? addresses;
 
   Customer({
@@ -13,6 +14,7 @@ class Customer {
     required this.phoneNumber,
     this.addresses,
     this.role,
+    this.balance,
   });
 
   factory Customer.fromJson(json) {
@@ -23,10 +25,11 @@ class Customer {
 
     return Customer(
       id: json['id'],
-      name: json['name'],
-      phoneNumber: json['phoneNumber'],
+      name: json['name'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
       addresses: addressesList,
-      role: json['role'],
+      role: json['role'] ?? '',
+      balance: json['balance'] ?? 0,
     );
   }
 
@@ -36,7 +39,8 @@ class Customer {
       'id': id,
       'phoneNumber': phoneNumber,
       'role': role,
-      'addresses': addresses!.map((address) => address.toJson()).toList()
+      'addresses': addresses!.map((address) => address.toJson()).toList(),
+      'balance': balance,
     };
   }
 }

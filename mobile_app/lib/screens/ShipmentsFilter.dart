@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/cubits/shipment_cubit/shipment_cubit.dart';
 import 'package:mobile_app/widgets/Button.dart';
 import 'package:mobile_app/widgets/CustomAppBar.dart';
 import 'package:mobile_app/widgets/CustomSelectionMenu.dart';
@@ -16,7 +18,14 @@ class ShipmentsFilterScreen extends StatefulWidget {
 class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
   late String cityCurrentChoice;
   late String statusCurrentChoice;
-  final List<String> statusItems = ['Items1', 'Items2'];
+  final List<String> statusItems = [
+    'جديد',
+    'في المخزن',
+    'قيد التوصيل',
+    'تعذر التسليم',
+    'إعادة التوصيل',
+    'تم التسليم'
+  ];
   DateTime fromDate = DateTime.now().subtract(const Duration(days: 7));
   DateTime toDate = DateTime.now();
   final List<String> cityItems = [
@@ -74,7 +83,7 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                 title: 'تصنيف',
               ),
               CustomSelectionMenu(
-                items: ['Items1', 'Items2'],
+                items: statusItems,
                 onChanged: (value) => setState(() {
                   statusCurrentChoice = value;
                 }),
@@ -111,9 +120,6 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
                       ),
                     ),
                   ),
-                  /*SizedBox(
-                    height: 10,
-                  ),*/
                   Row(
                     textDirection: TextDirection.rtl,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -147,29 +153,14 @@ class _ShipmentsFilterScreenState extends State<ShipmentsFilterScreen> {
               Button(
                 text: 'حفظ',
                 onPressed: () {
+                  BlocProvider.of<ShipmentCubit>(context).searchShipments({
+                    'id': '-',
+                    'status': statusCurrentChoice,
+                    'city': cityCurrentChoice,
+                  });
                   Navigator.pop(context);
                 },
               ),
-              /*ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.0,
-                    horizontal: 30,
-                  ),
-                  child: Text(
-                    'حفظ',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),*/
             ],
           ),
         ),

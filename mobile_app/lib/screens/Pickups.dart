@@ -56,13 +56,13 @@ class _PickupsScreenState extends State<PickupsScreen> {
                           const CustomAppBar(
                             title: 'طلبات الإلتقاط',
                           ),
-                          SearchField(
+                          /*SearchField(
                             controller: _searchController,
                             onChanged: (val) {},
                           ),
                           const SizedBox(
                             height: 20,
-                          ),
+                          ),*/
                           const PickupsScreenStatusList(),
                           Padding(
                             padding:
@@ -123,32 +123,44 @@ class _PickupsScreenState extends State<PickupsScreen> {
                             ),
                           ),
                           Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: pickups.length,
-                              itemBuilder: (context, index) {
-                                return PickupCard(
-                                  id: pickups[index].id.toString(),
-                                  status: pickups[index].status ?? '',
-                                  numberOfShipments:
-                                      pickups[index].shipmentsCount,
-                                  vehicleType: pickups[index].vehicleType,
-                                  deliveryAgentName:
-                                      pickups[index].deliveryAgent != null
-                                          ? pickups[index].deliveryAgent!.name
-                                          : '',
-                                  deliveryAgentPhoneNumber:
-                                      pickups[index].deliveryAgent != null
-                                          ? pickups[index]
-                                              .deliveryAgent!
-                                              .phoneNumber
-                                              .toString()
-                                          : '',
-                                  date: pickups[index].date ?? DateTime.now(),
-                                );
-                              },
-                            ),
+                            child: pickups.length > 0
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: pickups.length,
+                                    itemBuilder: (context, index) {
+                                      print(pickups[index].toString());
+                                      return PickupCard(
+                                        id: pickups[index].id.toString(),
+                                        status: pickups[index].status ?? '',
+                                        numberOfShipments:
+                                            pickups[index].shipmentsCount,
+                                        vehicleType: pickups[index].vehicleType,
+                                        deliveryAgentName:
+                                            pickups[index].deliveryAgent != null
+                                                ? pickups[index]
+                                                    .deliveryAgent!
+                                                    .name
+                                                : '',
+                                        deliveryAgentPhoneNumber:
+                                            pickups[index].deliveryAgent != null
+                                                ? pickups[index]
+                                                    .deliveryAgent!
+                                                    .phoneNumber
+                                                    .toString()
+                                                : '',
+                                        date: pickups[index].date ??
+                                            DateTime.now(),
+                                        deliveryAgentId: pickups[index].agentId,
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      'لا يوجد طلبات',
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
